@@ -295,7 +295,9 @@ export default {
       elem.click();
     },
     openProfile(id) {
-      this.$router.push({ name: 'profile', query: { userAccountId: id } });
+      if (this.$acl.hasModeratorPermission()) {
+        this.$router.push({ name: 'profile', query: { userAccountId: id } });
+      }
     },
     backToAgendas() {
       this.$router.push({ name: 'agendas' });

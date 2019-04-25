@@ -254,7 +254,9 @@ export default {
       this.content.subTopics.count = subTopics.count;
     },
     openProfile(id) {
-      this.$router.push({ name: 'profile', query: { userAccountId: id } });
+      if (this.$acl.hasModeratorPermission()) {
+        this.$router.push({ name: 'profile', query: { userAccountId: id } });
+      }
     },
     deleteTopic(id) {
       this.$modal.open({

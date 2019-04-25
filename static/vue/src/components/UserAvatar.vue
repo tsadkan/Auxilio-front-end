@@ -43,7 +43,7 @@ export default {
   computed: {
     imgUrl() {
       if (!this.bucket || !this.fileName) {
-        return false;
+        return `${API_ROOT}/Containers/${this.bucket}/download/avatar_anonymous.png`;
       }
       return `${API_ROOT}/Containers/${this.bucket}/download/${this.fileName}`;
     }

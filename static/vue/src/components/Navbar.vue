@@ -57,7 +57,7 @@
     </div>
     <a
       class="primary powered-by"
-      href="https://gitlab.com/ahadootec-projects/auxilio-front"
+      href="https://github.com/auxilio-team"
       style="color: white"
       target="_blank"
     >powered by Auxilio</a>

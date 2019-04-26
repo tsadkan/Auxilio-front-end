@@ -136,7 +136,7 @@
                 <header class="card-header">
                   <p class="card-header-title">{{ post.title | limitTo(30, '...')}}</p>
 
-                  <div class="card-header-icon delete-container has-text-right">
+                  <div v-if="post.category" class="card-header-icon delete-container has-text-right">
                     <b-tag
                       type="is-black"
                       v-bind:style="[{background: post.category.color }]"
@@ -291,6 +291,10 @@ export default {
     return {
       profile: {},
       myStatus: {
+        agendas: {
+          rows: [],
+          count: 0
+        },
         posts: {
           rows: [],
           count: 0

@@ -12,7 +12,7 @@
     "@ckeditor/ckeditor5-vue": "^1.0.0-beta.1",
     "axios": "^0.18.0",
     "axios-retry": "^3.1.1",
-    "bootstrap": "3.4.0",
+    "bootstrap": "~3.4.1",
     "buefy": "^0.7.2",
     "bulma-badge": "^2.0.0",
     "bulma-divider": "^2.0.1",

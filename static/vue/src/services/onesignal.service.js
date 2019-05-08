@@ -3,7 +3,7 @@ import { UserAccountAPI } from '@/api';
 import { AuthService } from '@/services';
 
 let OneSignal;
-
+const APP_ID = process.env.VUE_APP_APP_ID;
 export default class OnesignalService {
     static onesignalKey = 'ONE_SIGNAL';
 
@@ -14,6 +14,7 @@ export default class OnesignalService {
     }
 
     init() {
+      console.log('APP_ID', APP_ID);
       if (OnesignalService.onesignalId) {
         console.log('Onesignal already Initialized');
       } else {
@@ -40,7 +41,7 @@ export default class OnesignalService {
       console.log(OneSignal);
       console.log('Init OneSignal');
       OneSignal.push(['init', {
-        appId: '5a5f1006-c649-4c16-9efe-4f39feb37961',
+        appId: APP_ID,
         autoRegister: true,
         allowLocalhostAsSecureOrigin: true,
         notifyButton: {

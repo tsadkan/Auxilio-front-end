@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "onesignal": "cpx src/OneSignalSDKWorker.js ../app"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^11.2.0",
@@ -17,6 +18,7 @@
     "bulma-badge": "^2.0.0",
     "bulma-divider": "^2.0.1",
     "bulma-popover": "^1.0.0",
+    "cpx": "^1.5.0",
     "epic-spinners": "^1.0.4",
     "lodash.debounce": "^4.0.8",
     "register-service-worker": "^1.6.2",

@@ -95,7 +95,11 @@
             <div @click="vote(-1)" class="level-item has-text-centered">
               <div>
                 <p class="heading">
-                  <b-icon icon="thumb-down" :type="getAgendaVoteStateClass('down')" size="is-small"/>Down Vote
+                  <b-icon
+                    icon="thumb-down"
+                    :type="getAgendaVoteStateClass('down')"
+                    size="is-small"
+                  />Down Vote
                 </p>
                 <p class="title">{{agenda.downVote || 0}}</p>
               </div>
@@ -279,10 +283,19 @@ export default {
           scroll: 'keep',
           parent: this,
           props: {
-            agendaId: this.agenda.id
+            agendaId: this.agenda.id,
+            subject: 'subtopic'
           },
           events: {
-            close: async () => {
+            close: async (data) => {
+              if (data) {
+                await AgendaAPI.remove(this.agenda.id, data.reasonToDelete);
+                this.$toast.open({
+                  message: 'Delete request sent to moderator.',
+                  type: 'is-success',
+                  position: 'is-top'
+                });
+              }
             }
           },
           component: DeleteRequest,

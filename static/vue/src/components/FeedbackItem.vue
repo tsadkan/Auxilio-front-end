@@ -39,17 +39,19 @@
                 >EDIT</small>
                 &nbsp;&nbsp;
                 <small
-                  v-if="$acl.hasPermission(feedback)"
                   class="has-text-danger pointer"
-                  @click="deleteFeedback"
+                  @click="deleteFeedback(feedback)"
                 >DELETE</small>
                 <small
                   class="has-text-link pointer show-reply"
                   @click="scrollToCommentInput(feedback.id)"
-                  ><b-icon icon="reply" type="is-info" size="is-small"></b-icon>
-                    reply
-                    <vue-next-level-scroll :target="`#comment-input-${feedback.id}`" :ref="`commentInputRef-${feedback.id}`"></vue-next-level-scroll>
-                  </small>
+                >
+                  <b-icon icon="reply" type="is-info" size="is-small"></b-icon>reply
+                  <vue-next-level-scroll
+                    :target="`#comment-input-${feedback.id}`"
+                    :ref="`commentInputRef-${feedback.id}`"
+                  ></vue-next-level-scroll>
+                </small>
               </small>
             </p>
           </div>
@@ -108,7 +110,11 @@
         :key="i"
         :comment="comment"
       />
-      <comment-input :id="`comment-input-${feedback.id}`" @success="handleNewComment($event)" :feedback-id="feedback.id"/>
+      <comment-input
+        :id="`comment-input-${feedback.id}`"
+        @success="handleNewComment($event)"
+        :feedback-id="feedback.id"
+      />
     </div>
   </article>
 </template>
@@ -120,6 +126,7 @@ import FeedbackEdit from './FeedbackEdit.vue';
 import FilePreview from '@/components/FilePreview.vue';
 import { FeedbackAPI, FeedbackVoteAPI } from '@/api';
 import UserAvatar from './UserAvatar.vue';
+import DeleteRequest from './DeleteRequest.vue';
 
 export default {
   name: 'FeedbackItem',
@@ -211,24 +218,49 @@ export default {
     editFeedback() {
       this.editMode = true;
     },
-    deleteFeedback() {
-      this.$dialog.confirm({
-        title: 'Deleting comment',
-        message:
+    deleteFeedback(feedback) {
+      if (this.$acl.hasPermission(feedback)) {
+        this.$dialog.confirm({
+          title: 'Deleting comment',
+          message:
           'Are you sure you want to <b>delete</b> your comment? This action cannot be undone.',
-        confirmText: 'Delete Comment',
-        type: 'is-danger',
-        hasIcon: true,
-        onConfirm: async () => {
-          await FeedbackAPI.remove(this.feedback.id);
-          this.$toast.open({
-            message: 'Comment deleted',
-            type: 'is-success',
-            position: 'is-top'
-          });
-          this.$emit('deleted');
-        }
-      });
+          confirmText: 'Delete Comment',
+          type: 'is-danger',
+          hasIcon: true,
+          onConfirm: async () => {
+            await FeedbackAPI.remove(this.feedback.id);
+            this.$toast.open({
+              message: 'Comment deleted',
+              type: 'is-success',
+              position: 'is-top'
+            });
+            this.$emit('deleted');
+          }
+        });
+      } else {
+        this.$modal.open({
+          scroll: 'keep',
+          parent: this,
+          props: {
+            agendaId: this.feedback.id,
+            subject: 'Agenda'
+          },
+          events: {
+            close: async (data) => {
+              if (data) {
+                await FeedbackAPI.remove(this.feedback.id, data.reasonToDelete);
+                this.$toast.open({
+                  message: 'Delete request sent to moderator.',
+                  type: 'is-success',
+                  position: 'is-top'
+                });
+              }
+            }
+          },
+          component: DeleteRequest,
+          hasModalCard: true
+        });
+      }
     },
     openProfile(id) {
       this.$router.push({ name: 'profile', query: { userAccountId: id } });
@@ -236,7 +268,7 @@ export default {
     scrollToCommentInput(id) {
       const elem = this.$refs[`commentInputRef-${id}`];
       elem.click();
-    },
+    }
   }
 };
 </script>

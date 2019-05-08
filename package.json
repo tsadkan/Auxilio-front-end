@@ -1,6 +1,10 @@
 {
   "dependencies": {
     "bulma": "^0.7.2",
+    "register-service-worker": "^1.6.2",
     "vue-esc": "^2.0.0"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-pwa": "^3.7.0"
   }
 }

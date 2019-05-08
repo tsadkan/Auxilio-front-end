@@ -3,6 +3,8 @@ import Request from './request';
 
 const PATH = '/UserAccounts';
 const FEEDBACK_PATH = '/UserFeedbacks';
+const NOTIFICATION_SUBSCRIPTION_PATH = '/NotificationSubscriptions';
+const NOTIFICATION_CONFIG_PATH = '/NotificationConfigs';
 
 const UserAccountAPI = {
   get(id) {
@@ -85,6 +87,15 @@ const UserAccountAPI = {
   },
   deleteSystemFeedback(id) {
     return Request.delete(`${API_ROOT}${FEEDBACK_PATH}/${id}`);
+  },
+  subscribeForNotification(data) {
+    return Request.post(`${API_ROOT}${NOTIFICATION_SUBSCRIPTION_PATH}/subscribe`, data);
+  },
+  saveNotificationConfig(data) {
+    return Request.post(`${API_ROOT}${NOTIFICATION_CONFIG_PATH}/update-config`, { configData: data });
+  },
+  getNotificationConfig() {
+    return Request.get(`${API_ROOT}${NOTIFICATION_CONFIG_PATH}/get-config`);
   }
 };
 

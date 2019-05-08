@@ -3,6 +3,7 @@ import Router from '../router';
 
 export const ACCESS_TOKEN_KEY = 'token';
 export const PROFILE_KEY = 'profile';
+export const ONE_SIGNAL_KEY = 'ONE_SIGNAL';
 
 const AuthService = {
   login(email, password) {
@@ -42,6 +43,7 @@ const AuthService = {
     UserAccountAPI.logout().then(() => {
       localStorage.removeItem(ACCESS_TOKEN_KEY);
       localStorage.removeItem(PROFILE_KEY);
+      localStorage.removeItem(ONE_SIGNAL_KEY);
       Router.push({ name: 'login' });
     });
   },

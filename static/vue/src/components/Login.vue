@@ -46,6 +46,7 @@
 </template>
 <script>
 import { AuthService } from '@/services';
+import OneSignalService from '../services/onesignal.service';
 
 export default {
   name: 'Login',
@@ -65,7 +66,11 @@ export default {
             type: 'is-danger',
             position: 'is-top'
           });
-        } else if (result) this.$router.push({ name: 'agendas' });
+        } else if (result) {
+          const oneSignalService = new OneSignalService();
+          oneSignalService.init();
+          this.$router.push({ name: 'agendas' });
+        }
       }
     },
     forgotPassword() {

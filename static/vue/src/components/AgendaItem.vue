@@ -1,24 +1,39 @@
 <template>
   <div>
     <div class="agenda-item site-card pointer" :id="`topic-${content.id}`">
-
       <div class="site-card-header agenda-item-header is-marginless">
         <div>
-            <span v-if="content.createdBy" class="post-creater" @click.stop="openProfile(content.createdBy.id)">
-            {{`${content.createdBy.givenName} ${content.createdBy.familyName}`}}
-            </span>
-         <div class="delete-container has-text-right" @click.stop="deleteTopic(content.id)">
+          <span
+            v-if="content.createdBy"
+            class="post-creater"
+            @click.stop="openProfile(content.createdBy.id)"
+          >{{`${content.createdBy.givenName} ${content.createdBy.familyName}`}}</span>
+          <div class="delete-container has-text-right" @click.stop="deleteTopic(content.id)">
             <b-tooltip class="delete-tooltip" label="Delete Topic" position="is-bottom">
               <b-icon
-                icon="close" class="delete-agenda" type="is-secondary" position="is-bottom"
+                icon="close"
+                class="delete-agenda"
+                type="is-secondary"
+                position="is-bottom"
                 size="is-small"
               ></b-icon>
             </b-tooltip>
           </div>
           <h3 class="card-title agenda-title">{{content.title | limitTo(descriptionLimit, '...')}}</h3>
-          <h3 v-html="this.$options.filters.limitTo(content.description, descriptionLimit, '...')" class="card-title agenda-description"></h3>
-          <a class="card-title more-description card-links" v-if="content.description && content.description.length > descriptionLimit" @click="moreDescription(content.description)">Read More </a>
-          <a class="card-title more-description card-links" v-if="content.description && content.description.length === descriptionLimit" @click="lessDescription()">Read Less </a>
+          <h3
+            v-html="this.$options.filters.limitTo(content.description, descriptionLimit, '...')"
+            class="card-title agenda-description"
+          ></h3>
+          <a
+            class="card-title more-description card-links"
+            v-if="content.description && content.description.length > descriptionLimit"
+            @click="moreDescription(content.description)"
+          >Read More</a>
+          <a
+            class="card-title more-description card-links"
+            v-if="content.description && content.description.length === descriptionLimit"
+            @click="lessDescription()"
+          >Read Less</a>
           <!-- <div class="delete-container has-text-right" @click.stop="openInvitation(content.id)">
             <b-tooltip class="delete-tooltip" label="Invite users" position="is-bottom">
               <b-icon
@@ -26,7 +41,7 @@
                 size="is-small"
               ></b-icon>
             </b-tooltip>
-          </div> -->
+          </div>-->
           <div class="columns">
             <div class="column is-12">
               <div
@@ -34,8 +49,12 @@
                 v-if="i <= 5"
                 v-popover="{ name: `popover-${content.id}-${content.participatedUsers[i].id}` }"
                 :key="i"
-                class="member js-member">
-                <span class="member-initials" :title="`${user.givenName} ${user.familyName}`">{{ `${user.givenName} ${user.familyName}`| formatName }}</span>
+                class="member js-member"
+              >
+                <span
+                  class="member-initials"
+                  :title="`${user.givenName} ${user.familyName}`"
+                >{{ `${user.givenName} ${user.familyName}`| formatName }}</span>
                 <!-- <span v-if="user.isAdmin" class="member-type admin" title="This member is an admin of this topic."></span> -->
                 <popover :name="`popover-${content.id}-${content.participatedUsers[i].id}`">
                   <div>
@@ -43,45 +62,57 @@
                       <div class="mini-profile">
                         <div class="mini-profile-member member-large">
                           <span class="member-initials" title="tsadkan yitbarek (tsadkanyitbarek1)">
-                            <user-avatar class="avatar-profile" :size="30" :file-name="content.participatedUsers[i].profilePicture"/>
+                            <user-avatar
+                              class="avatar-profile"
+                              :size="30"
+                              :file-name="content.participatedUsers[i].profilePicture"
+                            />
                           </span>
                         </div>
                         <div class="mini-profile-info">
                           <h3 class="mini-profile-info-title">
-                            <a class="mini-profile-info-title-link js-profile" @click.stop="openProfile(content.participatedUsers[i].id)" href="#">{{ `${content.participatedUsers[i].givenName} ${content.participatedUsers[i].familyName}`}}</a>
+                            <a
+                              class="mini-profile-info-title-link js-profile"
+                              @click.stop="openProfile(content.participatedUsers[i].id)"
+                              href="#"
+                            >{{ `${content.participatedUsers[i].givenName} ${content.participatedUsers[i].familyName}`}}</a>
                           </h3>
                           <p class="quiet u-bottom">{{content.participatedUsers[i].email}}</p>
                           <p class="quiet u-bottom">{{content.participatedUsers[i].phoneNumber}}</p>
                           <p v-if="content.participatedUsers[i].isActive" class="u-bottom">
-                          <router-link :to="{name:'update-profile'}">
-                            <a class="quiet js-edit-profile" href="#">Edit profile info</a>
-                          </router-link>
+                            <router-link :to="{name:'update-profile'}">
+                              <a class="quiet js-edit-profile" href="#">Edit profile info</a>
+                            </router-link>
                           </p>
                         </div>
                       </div>
                       <ul class="pop-over-list">
-                        <li><a class="js-remove-member" href="#" @click.stop="openProfile(content.participatedUsers[i].id)" >View Member’s Activity</a></li>
+                        <li>
+                          <a
+                            class="js-remove-member"
+                            href="#"
+                            @click.stop="openProfile(content.participatedUsers[i].id)"
+                          >View Member’s Activity</a>
+                        </li>
                         <!-- <li v-if="content.participatedUsers[i].isActive" @click="leaveTopic(content.id, content.participatedUsers[i].id, i, content.participatedUsers[i].isActive)"><a class="js-remove-member">Leave Topic</a></li> -->
                         <!-- <li v-if="!content.participatedUsers[i].isActive" @click="leaveTopic(content.id, content.participatedUsers[i].id, i, content.participatedUsers[i].isActive)"><a class="js-remove-member">Remove from Topic…</a></li> -->
                       </ul>
                     </div>
                   </div>
-                  </popover>
-
-
+                </popover>
               </div>
               <div
                 class="more-member member js-member"
                 v-if="content.participatedUsers.length > 1"
                 v-popover="{ name: `popover-${content.id}-more` }"
-                >
+              >
                 <span class="member-initials" title="see all">{{ content.participatedUsers.length }}</span>
-                  <popover :name="`popover-${content.id}-more`">
-                    <div class="popover-container">
-                      <div class="popover-header">
-                        <span class="popover-title">Topic Members</span>
-                      </div>
-                      <!-- <h6 class="members">MEMBERS</h6>
+                <popover :name="`popover-${content.id}-more`">
+                  <div class="popover-container">
+                    <div class="popover-header">
+                      <span class="popover-title">Topic Members</span>
+                    </div>
+                    <!-- <h6 class="members">MEMBERS</h6>
                       <div class="users-avatar">
                         <div
                           v-if="user.isConfirmed"
@@ -92,19 +123,22 @@
                           <span  class="member-initials" :title="`${user.givenName} ${user.familyName}`">{{ `${user.givenName} ${user.familyName}` | formatName }}</span>
                           <span v-if="user.isAdmin" class="member-type admin" title="This member is an admin of this topic."></span>
                         </div>
-                      </div> -->
+                    </div>-->
 
-                      <div
-                        v-for="(user, i) in content.participatedUsers"
-                        v-popover="{ name: `popover-${content.id}-${content.participatedUsers[i].id}` }"
-                        :key="i"
-                        class="member js-member">
-                        <span class="member-initials" :title="`${user.givenName} ${user.familyName}`">{{ `${user.givenName} ${user.familyName}` | formatName }}</span>
-                      </div>
+                    <div
+                      v-for="(user, i) in content.participatedUsers"
+                      v-popover="{ name: `popover-${content.id}-${content.participatedUsers[i].id}` }"
+                      :key="i"
+                      class="member js-member"
+                    >
+                      <span
+                        class="member-initials"
+                        :title="`${user.givenName} ${user.familyName}`"
+                      >{{ `${user.givenName} ${user.familyName}` | formatName }}</span>
                     </div>
-                  </popover>
-            </div>
-
+                  </div>
+                </popover>
+              </div>
             </div>
           </div>
           <div class="agenda-status level">
@@ -139,23 +173,30 @@
             @click.native="filterByCategory(category.id)"
             v-bind:style="[{background: category.color }]"
           >{{category.name}}</b-tag>
-        </div> -->
+        </div>-->
       </div>
       <div v-if="subTopicList && subTopicList.length > 0" class="card-body">
-        <div
-          v-for="(subTopic, i) in subTopicList"
-          :key="i"
-        >
+        <div v-for="(subTopic, i) in subTopicList" :key="i">
           <sub-topic-item :content="subTopic"></sub-topic-item>
         </div>
         <!-- <p class="card-description">{{content.description | limitTo(120,'...')}}.</p> -->
       </div>
-      <div v-if="viewMore" class="card-links has-text-right" @click="viewMoreSubTopics()"><span> View more &rarr;</span></div>
-      <div v-if="!viewMore && content.subTopics.rows.length > 4" class="card-links has-text-right" @click="viewLessSubTopics()"><span> View less &rarr;</span></div>
+      <div v-if="viewMore" class="card-links has-text-right" @click="viewMoreSubTopics()">
+        <span>View more &rarr;</span>
+      </div>
+      <div
+        v-if="!viewMore && content.subTopics.rows.length > 4"
+        class="card-links has-text-right"
+        @click="viewLessSubTopics()"
+      >
+        <span>View less &rarr;</span>
+      </div>
       <div class="site-card-footer level subtopic-footer">
         <div class="subtopic-add" @click="openNewSubTopic()">
           <a class="open-card-composer js-open-card-composer" href="#">
-            <span><b-icon icon="plus" class="subtopic-add-icon" size="is-small"></b-icon></span>
+            <span>
+              <b-icon icon="plus" class="subtopic-add-icon" size="is-small"></b-icon>
+            </span>
             <span class="add-new">Add another sub topic</span>
           </a>
         </div>
@@ -170,6 +211,7 @@ import Invitation from './Invitation.vue';
 import { AgendaAPI } from '@/api';
 import ConfirmationDialog from '../shared/components/ConfirmationDialog.vue';
 import UserAvatar from './UserAvatar.vue';
+import DeleteRequest from './DeleteRequest.vue';
 import { AuthService } from '@/services';
 
 export default {
@@ -182,7 +224,7 @@ export default {
     content: {
       type: [Object],
       default: () => {}
-    },
+    }
   },
   data() {
     return {
@@ -259,19 +301,47 @@ export default {
       }
     },
     deleteTopic(id) {
-      this.$modal.open({
-        scroll: 'keep',
-        parent: this,
-        events: {
-          close: async (data) => {
-            if (data) {
-              this.$emit('onDelete', id);
+      if (this.$acl.hasModeratorPermission()) {
+        this.$modal.open({
+          scroll: 'keep',
+          parent: this,
+          events: {
+            close: async (data) => {
+              if (data) {
+                this.$emit('onDelete', id);
+              }
             }
-          }
-        },
-        component: ConfirmationDialog,
-        hasModalCard: true
-      });
+          },
+          component: ConfirmationDialog,
+          hasModalCard: true
+        });
+      } else {
+        this.$modal.open({
+          scroll: 'keep',
+          parent: this,
+          props: {
+            agendaId: this.content.id,
+            subject: 'Agenda'
+          },
+          events: {
+            close: async (data) => {
+              if (data) {
+                await AgendaAPI.requestTopicDelete({
+                  mainTopicId: this.content.id,
+                  reasonToDelete: data.reasonToDelete
+                });
+                this.$toast.open({
+                  message: 'Delete request sent to moderator.',
+                  type: 'is-success',
+                  position: 'is-top'
+                });
+              }
+            }
+          },
+          component: DeleteRequest,
+          hasModalCard: true
+        });
+      }
     },
     async filterByCategory(categoryId) {
       if (categoryId) {
@@ -391,7 +461,7 @@ export default {
   color: #ed0083;
   font-weight: bold;
 }
-.delete-agenda{
+.delete-agenda {
   font-size: 16px;
   margin-left: 100px;
   color: #593c79;
@@ -487,52 +557,53 @@ export default {
   text-decoration: none;
   color: #593c79;
 }
-.quiet, .quiet a {
-    color: #6b808c;
+.quiet,
+.quiet a {
+  color: #6b808c;
 }
 .u-bottom {
-
-    margin-bottom: 0;
-    padding-bottom: 0;
-    font-size: 14px;
-    color: #333 !important;
+  margin-bottom: 0;
+  padding-bottom: 0;
+  font-size: 14px;
+  color: #333 !important;
 }
 .u-bottom a {
   color: #6b808c;
 }
 
-.u-bottom a:hover{
+.u-bottom a:hover {
   text-decoration: underline;
 }
-ol, ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+ol,
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .pop-over-list li > a {
-    cursor: pointer;
-    display: block;
-    font-weight: 700;
-    padding: 6px 12px;
-    position: relative;
-    text-decoration: none;
-    font-size: 14px
+  cursor: pointer;
+  display: block;
+  font-weight: 700;
+  padding: 6px 12px;
+  position: relative;
+  text-decoration: none;
+  font-size: 14px;
 }
 .pop-over-list li > a.disabled {
-    color: #6b808c;
-    cursor: default;
+  color: #6b808c;
+  cursor: default;
 }
 .pop-over-list li > a.disabled:hover {
-    background: none;
+  background: none;
 }
 
 .pop-over-list li > a:hover {
-    background-color: #ed0083;
-    color: #fff;
+  background-color: #ed0083;
+  color: #fff;
 }
 .pop-over-list li > a {
-      color: #ed0083;
+  color: #ed0083;
 }
 .users-avatar {
   width: 100%;
@@ -550,7 +621,7 @@ ol, ul {
 
 .popover-container .invited {
   font-size: 14px;
-  padding: 10px 0px 0px 0px!important;
+  padding: 10px 0px 0px 0px !important;
   margin-bottom: 10px;
 }
 .popover-title {
@@ -558,7 +629,7 @@ ol, ul {
   color: #6b808c;
   display: block;
   line-height: 40px;
-  border-bottom: 1px solid rgba(9,45,66,.13);
+  border-bottom: 1px solid rgba(9, 45, 66, 0.13);
   margin: 0 12px;
   overflow: hidden;
   padding: 0 32px;

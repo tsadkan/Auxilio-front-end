@@ -44,6 +44,9 @@ const AgendaAPI = {
   removeMainTopic(id) {
     return Request.delete(`${API_ROOT}${MAIN_TOPIC_PATH}/${id}`);
   },
+  requestTopicDelete(data) {
+    return Request.post(`${API_ROOT}${MAIN_TOPIC_PATH}/delete-request`, data);
+  },
   invite(data) {
     return Request.post(`${API_ROOT}${MAIN_TOPIC_PATH}/invite`, data);
   },

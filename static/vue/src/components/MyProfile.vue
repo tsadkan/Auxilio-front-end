@@ -2,20 +2,20 @@
   <div class="columns">
     <div class="container profile">
       <div class="section profile-heading">
-         <div class="columns is-mobile is-multiline" style="float: right">
-            <a
-          v-if="isOwner || !userAccountId"
-          class="button is-primary is-outlined"
-          href="#"
-          @click="openFeedbackReport()"
-        >System Feedback</a>
-        <a
-          v-if="isOwner || !userAccountId"
-          class="button is-primary is-outlined"
-          href="#"
-          style="margin-left: 5px "
-          @click="openIssueReport()"
-        >Issue Report</a>
+        <div class="columns is-mobile is-multiline" style="float: right">
+          <a
+            v-if="isOwner || !userAccountId"
+            class="button is-primary is-outlined"
+            href="#"
+            @click="openFeedbackReport()"
+          >System Feedback</a>
+          <a
+            v-if="isOwner || !userAccountId"
+            class="button is-primary is-outlined"
+            href="#"
+            style="margin-left: 5px "
+            @click="openIssueReport()"
+          >Issue Report</a>
         </div>
 
         <div class="columns is-mobile is-multiline">
@@ -42,7 +42,7 @@
                 <a
                   class="button is-primary is-outlined"
                   href="#"
-                  id=""
+                  id
                   style="margin: 5px 0"
                 >Edit Profile</a>
               </router-link>
@@ -136,7 +136,10 @@
                 <header class="card-header">
                   <p class="card-header-title">{{ post.title | limitTo(30, '...')}}</p>
 
-                  <div v-if="post.category" class="card-header-icon delete-container has-text-right">
+                  <div
+                    v-if="post.category"
+                    class="card-header-icon delete-container has-text-right"
+                  >
                     <b-tag
                       type="is-black"
                       v-bind:style="[{background: post.category.color }]"
@@ -155,8 +158,8 @@
             </div>
             <div
               v-if="!viewLessPosts && (myStatus.posts.count > 5)"
-              class="card-links"
               @click="viewMorePosts()"
+              class="card-links"
             >
               <span>View more &rarr;</span>
             </div>
@@ -268,6 +271,66 @@
               </div>
             </div>
           </b-tab-item>
+          <b-tab-item label="Notification Settings" icon="bell">
+            <section>
+              <div class="columns">
+                <div class="column is-4">
+                  <div class="field">
+                      <b-switch v-model="notificationConfig.onTopicCreate" @input="saveNotificationConfig" type="is-info">
+                          Enable on topic create
+                      </b-switch>
+                  </div>
+                </div>
+                <div class="column is-4">
+                  <div class="field">
+                      <b-switch v-model="notificationConfig.onSubTopicCreate" @input="saveNotificationConfig" type="is-info">
+                          Enable on subTopic create
+                      </b-switch>
+                  </div>
+                </div>
+                <div class="column is-4">
+                  <div class="field">
+                      <b-switch v-model="notificationConfig.onFeedbackCreate" @input="saveNotificationConfig" type="is-info">
+                          Enable on feedback create
+                      </b-switch>
+                  </div>
+                </div>
+            </div>
+            <div class="columns">
+                <div class="column is-4">
+                  <div class="field">
+                      <b-switch v-model="notificationConfig.onReplyCreate" @input="saveNotificationConfig" type="is-info">
+                          Enable on reply create
+                      </b-switch>
+                  </div>
+                </div>
+                <div class="column is-4">
+                  <div class="field">
+                      <b-switch v-model="notificationConfig.onMySubTopicCreate" :disabled="notificationConfig.onSubTopicCreate" @input="saveNotificationConfig" type="is-info">
+                          Enable only on my subtopic create
+                      </b-switch>
+                  </div>
+                </div>
+                <div class="column is-4">
+                  <div class="field">
+                      <b-switch v-model="notificationConfig.onMyFeedbackCreate" :disabled="notificationConfig.onFeedbackCreate" @input="saveNotificationConfig" type="is-info">
+                          Enable only on my feedback create
+                      </b-switch>
+                  </div>
+                </div>
+            </div>
+            <div class="columns">
+                <div class="column is-4">
+                  <div class="field">
+                      <b-switch v-model="notificationConfig.onMyReplyCreate" :disabled="notificationConfig.onReplyCreate" @input="saveNotificationConfig" type="is-info">
+                          Enable only on my reply create
+                      </b-switch>
+                  </div>
+                </div>
+            </div>
+
+          </section>
+          </b-tab-item>
         </b-tabs>
       </div>
     </div>
@@ -317,7 +380,8 @@ export default {
       viewLessPosts: false,
       viewLessAgendas: false,
       viewLessFeedbacks: false,
-      viewLessReplies: false
+      viewLessReplies: false,
+      notificationConfig: {}
     };
   },
   created() {
@@ -326,8 +390,12 @@ export default {
     }
     this.getProfile();
     this.getMyStatus();
+    this.getMyNotificationConfig();
   },
   methods: {
+    async getMyNotificationConfig() {
+      this.notificationConfig = await UserAccountAPI.getNotificationConfig();
+    },
     async getProfile() {
       this.profile = await UserAccountAPI.getProfile(this.userAccountId);
     },
@@ -457,6 +525,14 @@ export default {
         component: ConfirmationDialog,
         hasModalCard: true
       });
+    },
+    async saveNotificationConfig() {
+      delete this.notificationConfig.id;
+      delete this.notificationConfig.userAccountId;	
+      delete this.notificationConfig.createdAt;	
+      delete this.notificationConfig.updatedAt;
+      delete this.notificationConfig._isDeleted;
+      await UserAccountAPI.saveNotificationConfig(this.notificationConfig);
     }
   },
   computed: {

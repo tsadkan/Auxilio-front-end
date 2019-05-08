@@ -10,7 +10,7 @@
         </header>
         <section class="modal-card-body">
           <b-field
-            label="Why do you think this post should be deleted?"
+            :label="`Why do you think this ${subject} should be deleted?`"
             :type="{'is-danger': errors.has('reasonToDelete')}"
             :message="errors.first('reasonToDelete')"
           >
@@ -34,7 +34,6 @@
 </template>
 <script>
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { AgendaAPI } from '@/api';
 
 export default {
   name: 'DeleteRequest',
@@ -42,6 +41,10 @@ export default {
     agendaId: {
       type: String,
       default: () => ''
+    },
+    subject: {
+      type: String,
+      default: () => 'post'
     }
   },
   data() {
@@ -61,13 +64,9 @@ export default {
     async save() {
       const valid = await this.$validator.validateAll();
       if (valid) {
-        await AgendaAPI.remove(this.agendaId, this.item.reasonToDelete);
-        this.$toast.open({
-          message: 'Delete request sent to moderator.',
-          type: 'is-success',
-          position: 'is-top'
+        this.$emit('close', {
+          reasonToDelete: this.item.reasonToDelete
         });
-        this.$emit('close', true);
       }
     }
   }

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
 import { AuthService } from '@/services';
+import Vue from 'vue';
 
 import app from '../main';
 
@@ -11,7 +12,7 @@ axiosRetry(Request, { retries: 3 });
 /**
  * Request interceptor
  */
-Request.interceptors.request.use(config => {
+Request.interceptors.request.use((config) => {
   app.$store.commit('core/addPendingRequest');
   const token = AuthService.getAccessToken();
   if (token) {
@@ -27,11 +28,11 @@ Request.interceptors.request.use(config => {
  * Response interceptor
  */
 Request.interceptors.response.use(
-  response => {
+  (response) => {
     app.$store.commit('core/removePendingRequest');
     return response.data;
   },
-  err => {
+  (err) => {
     app.$store.commit('core/removePendingRequest');
     // connection problem
     if (err.message === 'Network Error') {
@@ -59,7 +60,7 @@ Request.interceptors.response.use(
           position: 'is-top',
           duration: 1000
         });
-        this.$router.push({ name: 'login' });
+        Vue.$router.push({ name: 'login' });
       } else {
         app.$toast.open({
           message: 'Invalid credinitials.',

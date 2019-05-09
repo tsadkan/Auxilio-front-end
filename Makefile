@@ -1,4 +1,3 @@
-
 build:
 	cd static/vue && yarn install && yarn build --modern
 	hugo

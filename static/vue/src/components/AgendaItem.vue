@@ -45,12 +45,12 @@
           <div class="columns">
             <div class="column is-12">
               <div
-                v-for="(user, i) in content.participatedUsers"
-                v-if="i <= 5"
+                v-for="(user, i) in content.participatedUsers" :key="i">
+                <div v-if="i <= 5"
                 v-popover="{ name: `popover-${content.id}-${content.participatedUsers[i].id}` }"
-                :key="i"
+
                 class="member js-member"
-              >
+                >
                 <span
                   class="member-initials"
                   :title="`${user.givenName} ${user.familyName}`"
@@ -100,6 +100,7 @@
                     </div>
                   </div>
                 </popover>
+                </div>
               </div>
               <div
                 class="more-member member js-member"

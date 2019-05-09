@@ -85,7 +85,7 @@
             >No agenda found</span>
             <div
               class="card-links list-link"
-              v-for="(agenda, i) in myStatus.agendas.rows"
+              v-for="agenda in myStatus.agendas.rows"
               :key="agenda.id"
               @click="$router.push({name: 'agendas',params: { id: agenda.id }});"
             >
@@ -128,7 +128,7 @@
             >No suptopic found</span>
             <div
               class="card-links list-link"
-              v-for="(post, i) in myStatus.posts.rows"
+              v-for="post in myStatus.posts.rows"
               :key="post.id"
               @click="$router.push({name: 'agenda-detail',params: { id: post.id }});"
             >
@@ -528,9 +528,10 @@ export default {
     },
     async saveNotificationConfig() {
       delete this.notificationConfig.id;
-      delete this.notificationConfig.userAccountId;	
-      delete this.notificationConfig.createdAt;	
+      delete this.notificationConfig.userAccountId;
+      delete this.notificationConfig.createdAt;
       delete this.notificationConfig.updatedAt;
+      // eslint-disable-next-line no-underscore-dangle
       delete this.notificationConfig._isDeleted;
       await UserAccountAPI.saveNotificationConfig(this.notificationConfig);
     }

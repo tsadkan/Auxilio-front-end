@@ -160,6 +160,7 @@ export default {
     FeedbackItem,
     FeedbackInput,
     VueNextLevelScroll,
+    // eslint-disable-next-line vue/no-unused-components
     DeleteRequest
   },
   data() {

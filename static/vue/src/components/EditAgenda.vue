@@ -115,7 +115,7 @@ export default {
       if (valid) {
         const formData = new FormData();
         const item = { ...this.item, postId: this.agendaId };
-        Object.keys(item).forEach(key => {
+        Object.keys(item).forEach((key) => {
           formData.append(key, item[key]);
         });
         await AgendaAPI.update(formData);

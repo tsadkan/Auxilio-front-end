@@ -62,7 +62,7 @@
           </div>
             </div>
         <div class="columns">
-          
+
         </div>
         <b-field label="Description">
             <ckeditor :editor="editor" v-model="item.description" :config="editorConfig"></ckeditor>
@@ -183,4 +183,3 @@ export default {
   height: 200px;
 }
 </style>
-

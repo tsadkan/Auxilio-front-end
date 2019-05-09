@@ -106,7 +106,7 @@ export default {
         scroll: 'keep',
         parent: this,
         events: {
-          close: (data) => {
+          close: () => {
             this.getCategories();
           }
         },
@@ -192,6 +192,6 @@ export default {
   width: 20px;
 }
 .tag {
-  color: #fff; 
+  color: #fff;
 }
 </style>

@@ -45,9 +45,8 @@
   </div>
 </template>
 <script>
-import { AgendaAPI } from '@/api';
+import { AgendaAPI, UserAccountAPI } from '@/api';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { UserAccountAPI } from '@/api';
 
 const debounce = require('lodash.debounce');
 

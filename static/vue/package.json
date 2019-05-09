@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service lint && vue-cli-service build",
     "lint": "vue-cli-service lint",
     "onesignal": "cpx src/OneSignalSDKWorker.js ../app"
   },
@@ -27,6 +27,7 @@
     "vue": "^2.5.17",
     "vue-clickaway": "^2.2.2",
     "vue-country-region-select": "^2.0.4",
+    "vue-esc": "^3.0.1",
     "vue-js-popover": "^1.1.8",
     "vue-next-level-scroll": "^1.2.0",
     "vue-router": "^3.0.1",

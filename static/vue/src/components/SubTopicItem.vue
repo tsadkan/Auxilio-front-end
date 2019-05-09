@@ -42,7 +42,7 @@
           <b-tooltip label="number of comments" position="is-top">
             <b-icon icon="message numberofcomments" type="is-success" size="is-small"></b-icon>
             <span class="site-card-footer-item">{{content.numberOfFeedbacks}}</span>
-          </b-tooltip>        
+          </b-tooltip>
         </div>
         <div class="level-item comments">
           <b-tooltip label="number of replies" position="is-top">

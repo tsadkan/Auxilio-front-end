@@ -1,4 +1,13 @@
 module.exports = {
   outputDir: '../app',
-  baseUrl: './'
+  baseUrl: './',
+
+  pluginOptions: {
+    i18n: {
+      locale: 'en',
+      fallbackLocale: 'am',
+      localeDir: 'locales',
+      enableInSFC: false
+    }
+  }
 };

@@ -21,7 +21,9 @@
                 @click.stop="openProfile(feedback.createdBy.id)"
               >{{feedback.createdBy.title}} {{`${feedback.createdBy.givenName} ${feedback.createdBy.familyName}`}}</strong>
               <br>
-              {{feedback.body}}
+              <span v-html="urlify (feedback.body)"></span>
+              <link-preview :url="getFirstUrl(feedback.body)"></link-preview>
+              
               <br>
               <small>
                 <b-icon icon="thumb-up" type="is-primary" size="is-small"></b-icon>
@@ -268,6 +270,14 @@ export default {
     scrollToCommentInput(id) {
       const elem = this.$refs[`commentInputRef-${id}`];
       elem.click();
+    },
+    urlify(text) {
+      const urlRegex = /(https?:\/\/[^\s]+)/g;
+      return text.replace(urlRegex, url => `<a href="${url}">${url}</a>`);
+    },
+    getFirstUrl(text) {
+      const match = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.exec(text);
+      return (match && match[0]) || null;
     }
   }
 };

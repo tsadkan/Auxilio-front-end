@@ -13,7 +13,8 @@
         <p>
           <strong class="comment-creater" v-if="comment.createdBy"  @click.stop="openProfile(comment.createdBy.id)">{{`${comment.createdBy.givenName} ${comment.createdBy.familyName}`}}</strong>
           <br>
-          {{comment.body}}
+          <span v-html="urlify (comment.body)"></span>
+          <link-preview :url="getFirstUrl(comment.body)"></link-preview>
           <br>
           <small>{{comment.createdAt | formatDate}}</small>
           &nbsp;&nbsp;
@@ -91,6 +92,14 @@ export default {
     },
     openProfile(id) {
       this.$router.push({ name: 'profile', query: { userAccountId: id } });
+    },
+    urlify(text) {
+      const urlRegex = /(https?:\/\/[^\s]+)/g;
+      return text.replace(urlRegex, url => `<a href="${url}">${url}</a>`);
+    },
+    getFirstUrl(text) {
+      const match = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.exec(text);
+      return (match && match[0]) || null;
     }
   }
 };

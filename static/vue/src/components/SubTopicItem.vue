@@ -18,12 +18,44 @@
             </span>
         </p>
         <span class="subtopic-title" style="font-weight:bold;padding:5px">{{ content.title }}</span>
+        <!-- <span class="subtopic-title" style="font-weight:bold;padding:5px">
+          <section>
+
+        <b-collapse class="card" :open="false">
+            <div slot="trigger" slot-scope="props" class="card-header">
+<p class="card-header-title">
+  {{props}}
+</p>
+<a class="card-header-icon">
+    <b-icon
+        :icon="props.open ? 'menu-up' : 'menu-down'">
+    </b-icon>
+</a>
+            </div>
+            <div class="card-content">
+<div class="content">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris.
+    <a>#buefy</a>.
+</div>
+            </div>
+            <footer class="card-footer">
+<a class="card-footer-item">Save</a>
+<a class="card-footer-item">Edit</a>
+<a class="card-footer-item">Delete</a>
+            </footer>
+        </b-collapse>
+
+    </section>
+        </span> -->
+         
+
             <!-- <div class="has-text-right">
             <small>{{content.startDate | formatDate}}</small>
             -
             <small>{{content.endDate | formatDate}}</small>
         </div> -->
         <div class="site-card-footer level agenda-footer">
+            
         <div class="level-item">
           <span @click.stop="vote(1)" class="subtopic-upvote">
             <b-icon icon="thumb-up" size="is-small"

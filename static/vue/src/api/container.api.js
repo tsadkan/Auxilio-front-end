@@ -14,6 +14,9 @@ const ContainerAPI = {
       headers: { 'content-type': 'multipart/form-data' }
     };
     return Request.post(`${API_ROOT}${PATH}/${bucket}/customUpload`, data, config);
+  },
+  openFile(bucket, fileName) {
+    window.open(`${API_ROOT}/containers/${bucket}/download/${fileName}`);
   }
 };
 

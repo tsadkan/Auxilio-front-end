@@ -27,12 +27,7 @@
             :type="{'is-danger': errors.has('year')}"
             :message="errors.first('year')"
           >
-            <b-input
-              type="number"
-              v-model="meta.year"
-              placeholder="Year of Report*"
-              name="year"
-            ></b-input>
+            <b-input type="number" v-model="meta.year" placeholder="Year of Report*" name="year"></b-input>
           </b-field>
           <!-- <b-field
             label="Year Of Report"
@@ -46,9 +41,9 @@
               name="year"
               icon="calendar-today"
             ></b-datepicker>
-          </b-field> -->
+          </b-field>-->
 
-          <b-field class="file">
+          <!-- <b-field class="file">
             <b-upload v-model="file">
               <a class="button is-primary">
                 <b-icon icon="attachment"></b-icon>
@@ -56,7 +51,38 @@
               </a>
             </b-upload>
             <span class="file-name" v-if="file">{{ file.name }}</span>
-          </b-field>
+          </b-field> -->
+          <section>
+            <b-field>
+                <b-upload v-model="dropFiles"
+                    multiple
+                    drag-drop>
+                    <section class="section">
+                        <div class="content has-text-centered">
+                            <p>
+                                <b-icon
+                                    icon="upload"
+                                    size="is-large">
+                                </b-icon>
+                            </p>
+                            <p>Drop your files here or click to upload</p>
+                        </div>
+                    </section>
+                </b-upload>
+            </b-field>
+
+            <div class="tags">
+                <span v-for="(file, index) in dropFiles"
+                    :key="index"
+                    class="tag is-primary" >
+                    {{file.name}}
+                    <button class="delete is-small"
+                        type="button"
+                        @click="deleteDropFile(index)">
+                    </button>
+                </span>
+            </div>
+        </section>
 
           <b-field label="Summary">
             <ckeditor :editor="editor" v-model="meta.summary" :config="editorConfig"></ckeditor>
@@ -90,7 +116,8 @@ export default {
         summary: '',
         bibliography: ''
       },
-      file: null,
+      files: null,
+      dropFiles: [],
       editor: ClassicEditor,
       editorConfig: {
         // The configuration of the rich-text editor.
@@ -100,8 +127,11 @@ export default {
 
   methods: {
     save() {
-      const data = { meta: this.meta, file: this.file };
+      const data = { meta: this.meta, files: this.dropFiles };
       this.$emit('close', data);
+    },
+    deleteDropFile(index) {
+      this.dropFiles.splice(index, 1);
     }
   }
 };

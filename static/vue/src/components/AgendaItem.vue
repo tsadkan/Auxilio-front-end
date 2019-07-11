@@ -1,5 +1,23 @@
 <template>
   <div>
+      <b-modal :active.sync="isDescriptionModalActive" :width="640" scroll="keep">
+            <div class="modal-card" style="width: auto">
+                    <header class="modal-card-head">
+                        <p class="modal-card-title">{{ content.title }}</p>
+                    </header>
+                    <section class="modal-card-body">
+                        <p v-html="content.description"></p>
+                    </section>
+                    <footer class="modal-card-foot">
+                        <button class="button" type="button" @click="$parent.close()">Close</button>
+                        <button class="button is-primary" @click="openNewSubTopic"><b-icon
+                icon="plus"
+                class="is-white"
+                style="margin-right: 5px"
+              ></b-icon>Add new subtopic</button>
+                    </footer>
+                </div>
+        </b-modal>
     <div class="agenda-item site-card pointer" :id="`topic-${content.id}`">
       <div class="site-card-header agenda-item-header is-marginless">
         <div>
@@ -41,65 +59,67 @@
                 size="is-small"
               ></b-icon>
             </b-tooltip>
-          </div>-->
+          </div> -->
           <div class="columns">
             <div class="column is-12">
-              <div
-                v-for="(user, i) in content.participatedUsers" :key="i">
-                <div v-if="i <= 5"
-                v-popover="{ name: `popover-${content.id}-${content.participatedUsers[i].id}` }"
-
-                class="member js-member"
+              <div v-for="(user, i) in content.participatedUsers" :key="i">
+                <div
+                  v-if="i <= 5"
+                  v-popover="{ name: `popover-${content.id}-${content.participatedUsers[i].id}` }"
+                  class="member js-member"
                 >
-                <span
-                  class="member-initials"
-                  :title="`${user.givenName} ${user.familyName}`"
-                >{{ `${user.givenName} ${user.familyName}`| formatName }}</span>
-                <!-- <span v-if="user.isAdmin" class="member-type admin" title="This member is an admin of this topic."></span> -->
-                <popover :name="`popover-${content.id}-${content.participatedUsers[i].id}`">
-                  <div>
-                    <div class="board-member-menu">
-                      <div class="mini-profile">
-                        <div class="mini-profile-member member-large">
-                          <span class="member-initials" title="tsadkan yitbarek (tsadkanyitbarek1)">
-                            <user-avatar
-                              class="avatar-profile"
-                              :size="30"
-                              :file-name="content.participatedUsers[i].profilePicture"
-                            />
-                          </span>
+                  <span
+                    class="member-initials"
+                    :title="`${user.givenName} ${user.familyName}`"
+                  >{{ `${user.givenName} ${user.familyName}`| formatName }}</span>
+                  <!-- <span v-if="user.isAdmin" class="member-type admin" title="This member is an admin of this topic."></span> -->
+                  <popover :name="`popover-${content.id}-${content.participatedUsers[i].id}`">
+                    <div>
+                      <div class="board-member-menu">
+                        <div class="mini-profile">
+                          <div class="mini-profile-member member-large">
+                            <span
+                              class="member-initials"
+                              title="tsadkan yitbarek (tsadkanyitbarek1)"
+                            >
+                              <user-avatar
+                                class="avatar-profile"
+                                :size="30"
+                                :file-name="content.participatedUsers[i].profilePicture"
+                              />
+                            </span>
+                          </div>
+                          <div class="mini-profile-info">
+                            <h3 class="mini-profile-info-title">
+                              <a
+                                class="mini-profile-info-title-link js-profile"
+                                @click.stop="openProfile(content.participatedUsers[i].id)"
+                                href="#"
+                              >{{ `${content.participatedUsers[i].givenName} ${content.participatedUsers[i].familyName}`}}</a>
+                            </h3>
+                            <p class="quiet u-bottom">{{content.participatedUsers[i].email}}</p>
+                            <p class="quiet u-bottom">{{content.participatedUsers[i].phoneNumber}}</p>
+                            <p v-if="content.participatedUsers[i].isActive" class="u-bottom">
+                              <router-link :to="{name:'update-profile'}">
+                                <a class="quiet js-edit-profile" href="#">Edit profile info</a>
+                              </router-link>
+                            </p>
+                          </div>
                         </div>
-                        <div class="mini-profile-info">
-                          <h3 class="mini-profile-info-title">
+                        <ul class="pop-over-list">
+                          <li>
                             <a
-                              class="mini-profile-info-title-link js-profile"
-                              @click.stop="openProfile(content.participatedUsers[i].id)"
+                              class="js-remove-member"
                               href="#"
-                            >{{ `${content.participatedUsers[i].givenName} ${content.participatedUsers[i].familyName}`}}</a>
-                          </h3>
-                          <p class="quiet u-bottom">{{content.participatedUsers[i].email}}</p>
-                          <p class="quiet u-bottom">{{content.participatedUsers[i].phoneNumber}}</p>
-                          <p v-if="content.participatedUsers[i].isActive" class="u-bottom">
-                            <router-link :to="{name:'update-profile'}">
-                              <a class="quiet js-edit-profile" href="#">Edit profile info</a>
-                            </router-link>
-                          </p>
-                        </div>
+                              @click.stop="openProfile(content.participatedUsers[i].id)"
+                            >View Member’s Activity</a>
+                          </li>
+                          <!-- <li v-if="content.participatedUsers[i].isActive" @click="leaveTopic(content.id, content.participatedUsers[i].id, i, content.participatedUsers[i].isActive)"><a class="js-remove-member">Leave Topic</a></li> -->
+                          <!-- <li v-if="!content.participatedUsers[i].isActive" @click="leaveTopic(content.id, content.participatedUsers[i].id, i, content.participatedUsers[i].isActive)"><a class="js-remove-member">Remove from Topic…</a></li> -->
+                        </ul>
                       </div>
-                      <ul class="pop-over-list">
-                        <li>
-                          <a
-                            class="js-remove-member"
-                            href="#"
-                            @click.stop="openProfile(content.participatedUsers[i].id)"
-                          >View Member’s Activity</a>
-                        </li>
-                        <!-- <li v-if="content.participatedUsers[i].isActive" @click="leaveTopic(content.id, content.participatedUsers[i].id, i, content.participatedUsers[i].isActive)"><a class="js-remove-member">Leave Topic</a></li> -->
-                        <!-- <li v-if="!content.participatedUsers[i].isActive" @click="leaveTopic(content.id, content.participatedUsers[i].id, i, content.participatedUsers[i].isActive)"><a class="js-remove-member">Remove from Topic…</a></li> -->
-                      </ul>
                     </div>
-                  </div>
-                </popover>
+                  </popover>
                 </div>
               </div>
               <div
@@ -177,9 +197,24 @@
         </div>-->
       </div>
       <div v-if="subTopicList && subTopicList.length > 0" class="card-body">
-        <div v-for="(subTopic, i) in subTopicList" :key="i">
-          <sub-topic-item :content="subTopic"></sub-topic-item>
+        <div v-if="!$acl.hasModeratorPermission()">
+          <div v-for="(subTopic, i) in subTopicList" :key="i">
+            <sub-topic-item :content="subTopic"></sub-topic-item>
+          </div>
         </div>
+
+        <Container
+            v-if="$acl.hasModeratorPermission()"
+            group-name="col"
+            @drop="(e) => onCardDrop(content.id, e)"
+            drag-class="card-ghost"
+            drop-class="card-ghost-drop"
+            :drop-placeholder="dropPlaceholderOptions"
+          >
+            <Draggable v-for="(subTopic, i) in subTopicList" :key="i">
+                <sub-topic-item class="draggable-item" :content="subTopic"></sub-topic-item>
+            </Draggable>
+        </Container>
         <!-- <p class="card-description">{{content.description | limitTo(120,'...')}}.</p> -->
       </div>
       <div v-if="viewMore" class="card-links has-text-right" @click="viewMoreSubTopics()">
@@ -206,6 +241,8 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex';
+import { Container, Draggable } from 'vue-smooth-dnd';
 import SubTopicItem from './SubTopicItem.vue';
 import NewTopic from './NewTopic.vue';
 import Invitation from './Invitation.vue';
@@ -218,31 +255,52 @@ import { AuthService } from '@/services';
 export default {
   components: {
     SubTopicItem,
-    UserAvatar
+    UserAvatar,
+    Container,
+    Draggable
   },
   name: 'AgendaItem',
   props: {
     content: {
       type: [Object],
       default: () => {}
+    },
+    parentIndex: {
+      type: Number,
+      default: 0
     }
   },
   data() {
     return {
       isLoading: false,
-      descriptionLimit: 80
+      descriptionLimit: 80,
+      dropPlaceholderOptions: {
+        className: 'drop-preview',
+        animationDuration: '150',
+        showOnTop: true
+      },
+      isDescriptionModalActive: false,
+      description: ''
     };
   },
   computed: {
-    subTopicList() {
-      return this.content.subTopics.rows;
+    subTopicList: {
+      // getter
+      get() {
+        return this.content.subTopics.rows;
+      },
+      // setter
+      set(newValue) {
+      }
     },
     viewMore() {
       return this.content.subTopics.rows.length < this.content.subTopics.count;
-    }
+    },
+    ...mapGetters('core', ['dragElement', 'dropElement'])
   },
   methods: {
     openNewSubTopic() {
+      this.isDescriptionModalActive = false;
       this.$modal.open({
         scroll: 'keep',
         parent: this,
@@ -369,11 +427,42 @@ export default {
       });
     },
     moreDescription(description) {
-      this.descriptionLimit = description.length;
+      this.isDescriptionModalActive = true;
+      this.description = description;
     },
     lessDescription() {
       this.descriptionLimit = 80;
-    }
+    },
+    applyDrag(arr, dragResult) {
+      const { removedIndex, addedIndex, payload } = dragResult;
+      if (removedIndex === null && addedIndex === null) return arr;
+
+      const result = [...arr];
+      let itemToAdd = payload;
+
+      if (removedIndex !== null) {
+        itemToAdd = result.splice(removedIndex, 1)[0];
+      }
+
+      if (addedIndex !== null) {
+        result.splice(addedIndex, 0, itemToAdd);
+      }
+
+      return result;
+    },
+    onCardDrop(columnId, dropResult) {
+      if (dropResult.removedIndex !== null && dropResult.addedIndex !== null) {
+        this.content.subTopics.rows = this.applyDrag(this.subTopicList, dropResult);
+      } else {
+        if (dropResult.removedIndex !== null) {
+          this.$store.commit('core/changeDragElement', { removedIndex: dropResult.removedIndex, columnId });
+          this.$emit('onCardDrop');
+        } if (dropResult.addedIndex !== null) {
+          this.$store.commit('core/changeDropElement', { addedIndex: dropResult.addedIndex, dropColumnId: columnId });
+          this.$emit('onCardDrop');
+        }
+      }
+    },
   }
 };
 </script>
@@ -515,7 +604,6 @@ export default {
   left: 0;
   overflow: hidden;
   position: absolute;
-  text-align: center;
   top: 0;
   color: #17394d;
   cursor: pointer;

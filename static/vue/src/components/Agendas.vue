@@ -6,11 +6,7 @@
     </div>
     <div v-if="!isLoading" class="columns is-centered">
       <div class="column is-narrow has-text-centered">
-        <b-tag
-          type="is-white"
-          class="categories"
-          @click.native="filterByAll()"
-        >All</b-tag>
+        <b-tag type="is-white" class="categories" @click.native="filterByAll()">All</b-tag>
         <b-tag
           class="categories"
           v-for="(category, i) in categoryList"
@@ -20,11 +16,12 @@
           @close="deleteCategory(category.id)"
           @click.native="filterByCategory(category.id)"
         >{{category.name}}</b-tag>
-         <tag
-         v-if="$acl.hasModeratorPermission()"
+        <tag
+          v-if="$acl.hasModeratorPermission()"
           @click.native="openCategoryModal()"
-        class="add-category"
-        ><b-tooltip label="New Category" position="is-bottom">+</b-tooltip>
+          class="add-category"
+        >
+          <b-tooltip label="New Category" position="is-bottom">+</b-tooltip>
         </tag>
       </div>
     </div>
@@ -33,23 +30,31 @@
     </div>
 
     <div v-if="!isLoading" class="agenda-container">
-      <draggable v-model="agendaList">
-          <div
-            class="agenda-card"
-            v-for="(agenda, i) in agendaList"
-            :key="i"
-          >
-            <agenda-item :content="agenda" @onDelete="deleteTopic($event)" @onLeave="leaveTopic($event, i)"></agenda-item>
-          </div>
-      </draggable>
+      <!-- <draggable v-model="agendaList"> -->
+      <Container @drop="onDrop" orientation="horizontal">
+        <Draggable class="agenda-card" v-for="(agenda, i) in agendaList" :key="i">
+          <agenda-item
+            :parentIndex="i"
+            :content="agenda"
+            @onDelete="deleteTopic($event)"
+            @onLeave="leaveTopic($event, i)"
+            @onCardDrop="onCardDrop()"
+            class="draggable-item"
+          ></agenda-item>
+        </Draggable>
+      </Container>
+      <!-- </draggable> -->
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import { AtomSpinner } from 'epic-spinners';
-import draggable from 'vuedraggable';
+// import draggable from 'vuedraggable';
+import { Container, Draggable } from 'vue-smooth-dnd';
 import VueNextLevelScroll from 'vue-next-level-scroll';
+// import { applyDrag, generateItems } from './utils';
 import AgendaItem from './AgendaItem.vue';
 import { AgendaAPI, PostCategoryAPI } from '@/api';
 import NewCategory from './NewCategory.vue';
@@ -59,7 +64,9 @@ export default {
   components: {
     AgendaItem,
     AtomSpinner,
-    draggable,
+    // draggable,
+    Container,
+    Draggable,
     VueNextLevelScroll
   },
   name: 'Agendas',
@@ -70,6 +77,9 @@ export default {
       isLoading: true,
       mainTopicId: null
     };
+  },
+  computed: {
+    ...mapGetters('core', ['dragElement', 'dropElement'])
   },
   created() {
     this.getCategories();
@@ -95,7 +105,9 @@ export default {
     async filterByCategory(categoryId) {
       if (categoryId) {
         await this.getAgendas({ categoryId });
-        this.agendaList = this.agendaList.filter(agenda => agenda.subTopics.rows.length > 0);
+        this.agendaList = this.agendaList.filter(
+          agenda => agenda.subTopics.rows.length > 0
+        );
       }
     },
     async filterByAll() {
@@ -150,6 +162,48 @@ export default {
     },
     leaveTopic(index) {
       this.agendaList.splice(index, 1);
+    },
+    onDrop(dropResult) {
+      alert();
+      console.log(this.$store.dragSourceIndex);
+      console.log(dropResult);
+      this.agendaList = this.applyDrag(this.agendaList, dropResult);
+    },
+    applyDrag(arr, dragResult) {
+      const { removedIndex, addedIndex, payload } = dragResult;
+      if (removedIndex === null && addedIndex === null) return arr;
+
+      const result = [...arr];
+      let itemToAdd = payload;
+
+      if (removedIndex !== null) {
+        itemToAdd = result.splice(removedIndex, 1)[0];
+      }
+
+      if (addedIndex !== null) {
+        result.splice(addedIndex, 0, itemToAdd);
+      }
+
+      return result;
+    },
+    onCardDrop() {
+      const { removedIndex, columnId } = this.dragElement;
+      const { addedIndex, dropColumnId } = this.dropElement;
+      if (addedIndex !== -1 && removedIndex !== -1) {
+        const dragContent = this.agendaList.filter(agenda => agenda.id === columnId)[0];
+        const dropContent = this.agendaList.filter(agenda => agenda.id === dropColumnId)[0];
+
+        const dragIndex = this.agendaList.indexOf(dragContent);
+        const dropIndex = this.agendaList.indexOf(dropContent);
+
+        const contentToMove = this.agendaList[dragIndex].subTopics.rows[removedIndex];
+        console.log(contentToMove);
+        this.agendaList[dragIndex].subTopics.rows.splice(removedIndex, 1);
+        this.agendaList[dropIndex].subTopics.rows.splice(addedIndex, 0, contentToMove);
+
+        this.$store.commit('core/changeDragElement', { removedIndex: -1, columnId: '' });
+        this.$store.commit('core/changeDropElement', { addedIndex: -1, dropColumnId: '' });
+      }
     }
   }
 };
@@ -165,7 +219,7 @@ export default {
 }
 .add-category {
   color: #fff !important;
-  background-color:#08020266 !important;
+  background-color: #08020266 !important;
   font-size: 18px;
 }
 .add-category:hover {

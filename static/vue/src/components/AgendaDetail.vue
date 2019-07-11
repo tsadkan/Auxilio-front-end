@@ -29,7 +29,8 @@
                 </span>
                 <vue-next-level-scroll :target="`#${scrollTarget}`" ref="scrollRef"></vue-next-level-scroll>
               </p>
-              <div v-html="agenda.description" class="has-text-grey"></div>
+              <span v-if="agenda.description" v-html="urlify(agenda.description)"></span>
+              <link-preview v-if="agenda.description" :url="getFirstUrl(agenda.description)"></link-preview>
             </div>
 
             <div class="column is-narrow vote" style="align-items:center; display: flex;">
@@ -318,6 +319,16 @@ export default {
     },
     escape(event) {
       console.log('Esc key pressed.', `Event: ${event}`);
+    },
+    urlify(text) {
+      console.log('----------------------');
+      console.log(text);
+      const urlRegex = /(https?:\/\/[^\s]+)/g;
+      return text.replace(urlRegex, url => `<a href="${url}">${url}</a>`);
+    },
+    getFirstUrl(text) {
+      const match = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.exec(text);
+      return (match && match[0]) || null;
     }
   },
   watch: {

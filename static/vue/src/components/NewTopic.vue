@@ -1,31 +1,37 @@
 <template>
   <div>
     <form @submit.prevent="save" novalidate>
+      <b-notification :closable="false" v-if="isDocumentUploading">
+        <h4>Uploading...</h4>
+        <b-loading :is-full-page="true" :active.sync="isDocumentUploading" :can-cancel="false">
+          <b-icon icon="attachment" size="is-large" custom-class="fa-spin"></b-icon>
+        </b-loading>
+      </b-notification>
       <div class="modal-card">
         <header
           class="modal-card-head has-background-info has-text-centered"
           style="justify-content: center;"
         >
-        <p class="modal-card-title has-text-white">Create new Topic</p>
+          <p class="modal-card-title has-text-white">Create new Topic</p>
         </header>
-         <section class="modal-card-body">
-            <div class="columns">
-              <div class="column is-6">
-                <b-field
-                  label="Title"
-                  :type="{'is-danger': errors.has('title')}"
-                  :message="errors.first('title')"
-                >
-                  <b-input
-                    type="text"
-                    v-model="item.title"
-                    placeholder="Topic title*"
-                    name="title"
-                    v-validate="'required'"
-                  ></b-input>
-                </b-field>
-              </div>
-              <!-- <div class="column is-4">
+        <section class="modal-card-body">
+          <div class="columns">
+            <div class="column is-6">
+              <b-field
+                label="Title"
+                :type="{'is-danger': errors.has('title')}"
+                :message="errors.first('title')"
+              >
+                <b-input
+                  type="text"
+                  v-model="item.title"
+                  placeholder="Topic title*"
+                  name="title"
+                  v-validate="'required'"
+                ></b-input>
+              </b-field>
+            </div>
+            <!-- <div class="column is-4">
                 <b-field
                   label="Due Date"
                   :type="{'is-danger': errors.has('due date')}"
@@ -39,44 +45,49 @@
                     icon="calendar-today"
                   ></b-datepicker>
                 </b-field>
-              </div> -->
-              <div class="column is-6">
-            <b-field
-              label="Category"
-              :type="{'is-danger': errors.has('category')}"
-              :message="errors.first('category')"
-            >
-              <b-select
-                v-model="item.categoryId"
-                placeholder="Select a category"
-                expanded
-                name="category"
+            </div>-->
+            <div class="column is-6">
+              <b-field
+                label="Category"
+                :type="{'is-danger': errors.has('category')}"
+                :message="errors.first('category')"
               >
-                <option
-                  v-for="option in categoryList"
-                  :value="option.id"
-                  :key="option.id"
-                >{{ option.name }}</option>
-              </b-select>
-            </b-field>
-          </div>
+                <b-select
+                  v-model="item.categoryId"
+                  placeholder="Select a category"
+                  expanded
+                  name="category"
+                >
+                  <option
+                    v-for="option in categoryList"
+                    :value="option.id"
+                    :key="option.id"
+                  >{{ option.name }}</option>
+                </b-select>
+              </b-field>
             </div>
-        <div class="columns">
-
-        </div>
-        <b-field label="Description">
+          </div>
+          <div class="columns"></div>
+          <b-field label="Description">
             <ckeditor :editor="editor" v-model="item.description" :config="editorConfig"></ckeditor>
-        </b-field>
-        <p class="control attachment-btn">
-          <button type="button" class="button" @click="openAttachFile">
-            <b-icon icon="attachment"></b-icon>
-            <span style="margin-left:4px">Add Files</span>
-          </button>
-        </p>
-        <template v-for="(file,index) in item.files">
-          <FilePreview :bucket="'feedback'" :key="index" :fileData="file"/>
-        </template>
-      </section>
+          </b-field>
+          <p class="control attachment-btn">
+            <button type="button" class="button" @click="openAttachFile">
+              <b-icon icon="attachment"></b-icon>
+              <span style="margin-left:4px">Add Files</span>
+            </button>
+          </p>
+          <template v-for="(file,index) in item.files">
+            <FilePreview
+              :bucket="'feedback'"
+              :key="index"
+              :fileData="file"
+              :hasDownload="false"
+              :index="index"
+              @onDelete="removeFile($event)"
+            />
+          </template>
+        </section>
         <footer class="modal-card-foot has-background-info" style="justify-content: center;">
           <div class="is-pulled-right">
             <button class="button" type="button" @click="cancel">Close</button>
@@ -92,6 +103,7 @@ import { AgendaAPI, PostCategoryAPI } from '@/api';
 import FilePreview from '@/components/FilePreview.vue';
 import FileUpload from '@/components/FileUpload.vue';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { mapState } from 'vuex';
 
 export default {
   name: 'NewAgenda',
@@ -116,6 +128,12 @@ export default {
   created() {
     this.getCategoryList();
   },
+  computed: {
+    ...mapState('DocumentStore', [
+      'documentUploadProgress',
+      'isDocumentUploading'
+    ])
+  },
   methods: {
     openAttachFile() {
       this.$modal.open({
@@ -131,8 +149,15 @@ export default {
       });
     },
     onFileAttach(data) {
-      const { file, meta } = data;
-      this.item.files.push({ file, meta });
+      const { files, meta } = data;
+      console.log(files);
+      if (files !== null) {
+        for (let i = 0; i < files.length; i += 1) {
+          // this.item.files.push({ files[i] , meta });
+          const file = files[i];
+          this.item.files.push({ file, meta });
+        }
+      }
     },
     cancel() {
       this.$emit('close');
@@ -162,7 +187,11 @@ export default {
 
         formData.append('mainTopicId', this.mainTopicId);
 
+        this.$store.commit('DocumentStore/setDocumentUploading', true);
+
         await AgendaAPI.create(formData);
+        this.$store.commit('DocumentStore/setDocumentUploading', false);
+        this.$store.commit('DocumentStore/setDocumentUploadProgress', 0);
         this.$toast.open({
           message: 'Sub Topic created.',
           type: 'is-success',
@@ -170,6 +199,9 @@ export default {
         });
         this.$emit('close', true);
       }
+    },
+    removeFile(index) {
+      this.item.files.splice(index, 1);
     }
   }
 };

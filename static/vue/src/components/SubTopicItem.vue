@@ -1,24 +1,30 @@
 <template>
-    <div class="subtopic-card" @click="openDetail()">
-        <b-tooltip :label="`${content.newFeedbacks} new feedbacks`" position="is-top" class="tooltip-new-feedback">
-            <div
-            class="is-badge-primary is-badge-small subtopic-badge"
-            :class="{ badge: content.newFeedbacks > 0 }"
-            :data-badge="'+' + content.newFeedbacks"
-            ></div>
-        </b-tooltip>
-        <p class="subtopic-header agenda-header">
-            <b-tag
-                type="is-black"
-                v-bind:style="[{background: content.category.color }]"
-                class="subtopic-tag"
-            >{{ content.category.name }}</b-tag>
-            <span style="float:right" v-if="content.createdBy">
-              <span class="post-creater" >{{`${content.createdBy.givenName} ${content.createdBy.familyName}`}}</span>
-            </span>
-        </p>
-        <span class="subtopic-title" style="font-weight:bold;padding:5px">{{ content.title }}</span>
-        <!-- <span class="subtopic-title" style="font-weight:bold;padding:5px">
+  <div class="subtopic-card" @click="openDetail()">
+    <b-tooltip
+      :label="`${content.newFeedbacks} new feedbacks`"
+      position="is-top"
+      class="tooltip-new-feedback"
+    >
+      <div
+        class="is-badge-primary is-badge-small subtopic-badge"
+        :class="{ badge: content.newFeedbacks > 0 }"
+        :data-badge="'+' + content.newFeedbacks"
+      ></div>
+    </b-tooltip>
+    <p class="subtopic-header agenda-header">
+      <b-tag
+        type="is-black"
+        v-bind:style="[{background: content.category.color }]"
+        class="subtopic-tag"
+      >{{ content.category.name }}</b-tag>
+      <span style="float:right" v-if="content.createdBy">
+        <span
+          class="post-creater"
+        >{{`${content.createdBy.givenName} ${content.createdBy.familyName}`}}</span>
+      </span>
+    </p>
+    <span class="subtopic-title" style="font-weight:bold;padding:5px">{{ content.title }}</span>
+    <!-- <span class="subtopic-title" style="font-weight:bold;padding:5px">
           <section>
 
         <b-collapse class="card" :open="false">
@@ -46,44 +52,38 @@
         </b-collapse>
 
     </section>
-        </span> -->
-         
+    </span>-->
 
-            <!-- <div class="has-text-right">
+    <!-- <div class="has-text-right">
             <small>{{content.startDate | formatDate}}</small>
             -
             <small>{{content.endDate | formatDate}}</small>
-        </div> -->
-        <div class="site-card-footer level agenda-footer">
-            
-        <div class="level-item">
-          <span @click.stop="vote(1)" class="subtopic-upvote">
-            <b-icon icon="thumb-up" size="is-small"
-            :type="getAgendaVoteStateClass('up')"
-            ></b-icon>&nbsp;
-          </span>
-          <span
-            class="site-card-footer-item"
-          >{{(content.upVote - content.downVote) | formatVote}}</span>
-          &nbsp;
-          <span @click.stop="vote(-1)" class="subtopic-downvote">
-            <b-icon icon="thumb-down" :type="getAgendaVoteStateClass('down')" size="is-small"></b-icon>&nbsp;
-          </span>
-        </div>
-        <div class="level-item comments">
-          <b-tooltip label="number of comments" position="is-top">
-            <b-icon icon="message numberofcomments" type="is-success" size="is-small"></b-icon>
-            <span class="site-card-footer-item">{{content.numberOfFeedbacks}}</span>
-          </b-tooltip>
-        </div>
-        <div class="level-item comments">
-          <b-tooltip label="number of replies" position="is-top">
-            <b-icon icon="reply numberofcomments" type="is-success" size="is-small"></b-icon>
-            <span class="site-card-footer-item">{{content.numberOfReplies}}</span>
-          </b-tooltip>
-        </div>
+    </div>-->
+    <div class="site-card-footer level agenda-footer">
+      <div class="level-item">
+        <span @click.stop="vote(1)" class="subtopic-upvote">
+          <b-icon icon="thumb-up" size="is-small" :type="getAgendaVoteStateClass('up')"></b-icon>&nbsp;
+        </span>
+        <span class="site-card-footer-item">{{(content.upVote - content.downVote) | formatVote}}</span>
+        &nbsp;
+        <span @click.stop="vote(-1)" class="subtopic-downvote">
+          <b-icon icon="thumb-down" :type="getAgendaVoteStateClass('down')" size="is-small"></b-icon>&nbsp;
+        </span>
+      </div>
+      <div class="level-item comments">
+        <b-tooltip label="number of comments" position="is-top">
+          <b-icon icon="message numberofcomments" type="is-success" size="is-small"></b-icon>
+          <span class="site-card-footer-item">{{content.numberOfFeedbacks}}</span>
+        </b-tooltip>
+      </div>
+      <div class="level-item comments">
+        <b-tooltip label="number of replies" position="is-top">
+          <b-icon icon="reply numberofcomments" type="is-success" size="is-small"></b-icon>
+          <span class="site-card-footer-item">{{content.numberOfReplies}}</span>
+        </b-tooltip>
       </div>
     </div>
+  </div>
 </template>
 <script>
 import { AgendaVoteAPI } from '@/api';
@@ -94,8 +94,7 @@ export default {
   props: {
     content: {
       type: [Object],
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -130,12 +129,11 @@ export default {
         return this.content.voted === -1 ? 'is-info' : 'is-grey-lighter';
       }
       return '';
-    },
+    }
   }
 };
 </script>
 <style>
-
 .has-text-right {
   color: #555;
   padding: 0px !important;
@@ -148,16 +146,17 @@ export default {
 .tooltip-new-feedback {
   display: inherit;
 }
-.add-new, .subtobic-add-icon{
+.add-new,
+.subtobic-add-icon {
   color: #6b808c;
   font-size: 14px;
 }
 .subtobic-add-icon {
-  color:  #17394d;
+  color: #17394d;
 }
 .add-new:hover {
   text-decoration: underline;
-  color:  #17394d;
+  color: #17394d;
 }
 .agenda-item {
   background: #dfe3e6;
@@ -182,7 +181,7 @@ export default {
 .subtopic-card {
   background-color: #fff;
   border-radius: 3px;
-  box-shadow: 0 0 7px 0 rgb(0,0,0,0.5);
+  box-shadow: 0 0 7px 0 rgb(0, 0, 0, 0.5);
   cursor: pointer;
   display: block;
   margin-bottom: 8px;
@@ -194,10 +193,10 @@ export default {
   padding: 7px;
   transition: 0.3s;
 }
-.subtopic-card:hover{
+.subtopic-card:hover {
   background: #d8d8d852;
-  box-shadow: 0 2px 10px 0 rgb(0,0,0,0.5);
-   transition: 0.3s;
+  box-shadow: 0 2px 10px 0 rgb(0, 0, 0, 0.5);
+  transition: 0.3s;
 }
 .subtopic-tag {
   height: 18px !important;
@@ -208,13 +207,14 @@ export default {
 .agenda-header {
   padding: 0px 0px 10px 0px;
 }
-.subtopic-upvote, .subtopic-downvote {
+.subtopic-upvote,
+.subtopic-downvote {
   cursor: pointer;
 }
 .numberofreplies {
   margin-left: 5px !important;
 }
-.comments .icon{
+.comments .icon {
   height: 1.5rem !important;
 }
 </style>

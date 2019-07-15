@@ -8,6 +8,7 @@ import FeedbackVoteAPI from './feedback-vote.api';
 import ContainerAPI from './container.api';
 import SearchAPI from './search.api';
 import GenericDocumentAPI from './generic-document.api';
+import AnnouncementAPI from './announcement.api';
 
 const API_ROOT = process.env.VUE_APP_API_ROOT || window.location.origin;
 // eslint-disable-next-line
@@ -22,5 +23,6 @@ export {
   FeedbackVoteAPI,
   ContainerAPI,
   SearchAPI,
-  GenericDocumentAPI
+  GenericDocumentAPI,
+  AnnouncementAPI
 };

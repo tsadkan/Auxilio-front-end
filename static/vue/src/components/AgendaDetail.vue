@@ -1,6 +1,7 @@
 <template>
   <div class="columns is-centered" v-esc="backToAgendas">
-    <div class="column is-three-fifths">
+
+    <div class="column is-three-fifths" style="padding-left:30px">
       <div class="card" style="margin-top:1em; border-radius:0.7em;">
         <div class="card-content">
           <div class="columns">
@@ -144,6 +145,29 @@
         </div>
       </div>
     </div>
+
+    <div class="column is-two-fifths" style="padding-right:30px;margin-top:20px">
+      <section>
+        <b-message :title="agenda.mainTopic.title" active.sync="true" aria-close-label="Close message" closable="true">
+            <p v-html="agenda.mainTopic.description"></p>
+        </b-message>
+    </section>
+       <!-- <div class="card" style="margin-top:1em; border-radius:0.7em;">
+         <div class="card-content">
+           <div class="columns">
+            <div class="column">
+              <p class="title">{{agenda.mainTopic.title}}</p>
+              <p v-html="agenda.mainTopic.description"></p>
+              <p>
+                <user-avatar :bucket="'users'" :size="30" :file-name="agenda.mainTopic.createdBy.profilePicture"/>
+                <span>{{ `${agenda.mainTopic.createdBy.givenName} ${agenda.mainTopic.createdBy.familyName}` }}</span>
+                <span>{{ agenda.mainTopic.createdAt | formatDate }}</span>
+              </p>
+            </div>
+           </div>
+         </div>
+       </div> -->
+    </div>
   </div>
 </template>
 <script>
@@ -153,6 +177,7 @@ import FeedbackInput from './FeedbackInput.vue';
 import FilePreview from '@/components/FilePreview.vue';
 import VueNextLevelScroll from 'vue-next-level-scroll';
 import DeleteRequest from './DeleteRequest.vue';
+import UserAvatar from './UserAvatar.vue';
 
 export default {
   name: 'AgendaDetail',
@@ -162,7 +187,8 @@ export default {
     FeedbackInput,
     VueNextLevelScroll,
     // eslint-disable-next-line vue/no-unused-components
-    DeleteRequest
+    DeleteRequest,
+    UserAvatar
   },
   data() {
     return {

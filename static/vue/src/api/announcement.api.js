@@ -1,9 +1,9 @@
 import { API_ROOT } from './index';
 import Request from './request';
 
-const PATH = '/GenericDocuments';
+const PATH = '/Announcements';
 
-const GenericDocumentAPI = {
+const AnnouncementAPI = {
   all(limit, skip, order, filter) {
     return Request.get(`${API_ROOT}${PATH}/list`);
   },
@@ -20,4 +20,4 @@ const GenericDocumentAPI = {
   }
 };
 
-export default GenericDocumentAPI;
+export default AnnouncementAPI;

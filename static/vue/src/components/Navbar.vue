@@ -4,9 +4,21 @@
       <div class="navbar-brand">
         <router-link tag="a" :to="{name:'agendas'}">
           <div class="navbar-item">
-            <img src="@/assets/logo.png" class="site-logo" style="max-height:2.5em !important; margin-left: 10px">
+            <img
+              src="@/assets/logo.png"
+              class="site-logo"
+              style="max-height:2.5em !important; margin-left: 10px"
+            >
+            <a
+                class="button is-primary is-outlined"
+                href="#"
+                @click="openAnnouncement()"
+                style="margin-left:25px"
+              >
+                <b-icon icon="message" size="is-small"></b-icon>
+                <span>Announcements</span>
+              </a>
           </div>
-
         </router-link>
       </div>
 
@@ -28,42 +40,54 @@
                 <span>New Agenda</span>
               </a>
               <a
-            class="button is-primary is-outlined"
-            href="#"
-
-            @click="openGenericDocuments()"
-            style="margin-right:5px"
-          ><b-icon icon="folder" size="is-small"></b-icon><span>Resources</span></a>
+                class="button is-primary is-outlined"
+                href="#"
+                @click="openGenericDocuments()"
+                style="margin-right:5px"
+              >
+                <b-icon icon="folder" size="is-small"></b-icon>
+                <span>Resources</span>
+              </a>
             </div>
           </div>
           <div class="column is-narrow">
             <div class="navbar-item">
               <div class="mb-3 user-pic" size="40px" @click="navigateToMyProfile">
-                <span >
-                <user-avatar :bucket="bucket" :size="30" :file-name="userProfile.profilePicture"/>
+                <span>
+                  <user-avatar :bucket="bucket" :size="30" :file-name="userProfile.profilePicture"/>
                 </span>
               </div>
               <span class="has-text-white is-size-7 user-name" @click="navigateToMyProfile">
                 <div class="tags has-addons" style="position:relative;margin-right:20px">
-                  <span class="tag is-dark" style="border-top-left-radius: 10px">{{ `${userProfile.givenName} ${userProfile.familyName}` }}</span>
-                  <span v-if="$acl.hasModeratorPermission()" class="tag is-success" style="border-bottom-right-radius:10px">Moderator</span>
+                  <span
+                    class="tag is-dark"
+                    style="border-top-left-radius: 10px"
+                  >{{ `${userProfile.givenName} ${userProfile.familyName}` }}</span>
+                  <span
+                    v-if="$acl.hasModeratorPermission()"
+                    class="tag is-success"
+                    style="border-bottom-right-radius:10px"
+                  >Moderator</span>
                 </div>
               </span>
               <b-dropdown aria-role="list" style="position:relative; margin-right:20px;">
-                    <p                                          
-                        slot="trigger"
-                        role="button">
-                        <b-icon type="is-white" class="fa fa-globe is-medium" style="cursor: pointer"></b-icon>
-                    </p>
+                <p slot="trigger" role="button">
+                  <b-icon type="is-white" class="fa fa-globe is-medium" style="cursor: pointer"></b-icon>
+                </p>
 
-                    <b-dropdown-item aria-role="listitem"  v-for="lang in languages" @click="changeLanguage(lang.key)" :key="lang.key">{{ lang.name }}</b-dropdown-item>
-                </b-dropdown>
+                <b-dropdown-item
+                  aria-role="listitem"
+                  v-for="lang in languages"
+                  @click="changeLanguage(lang.key)"
+                  :key="lang.key"
+                >{{ lang.name }}</b-dropdown-item>
+              </b-dropdown>
               <a class="button is-primary" href="#" @click="logout">
                 <span>{{$t('logout')}}</span>
               </a>
             </div>
           </div>
-        </div>  
+        </div>
       </div>
     </div>
     <a
@@ -81,6 +105,7 @@ import { API_ROOT } from '@/api';
 import UserAvatar from './UserAvatar.vue';
 import Search from './Search.vue';
 import GenericDocument from './GenericDocument.vue';
+import Announcement from './Announcement.vue';
 
 export default {
   name: 'Navbar',
@@ -118,6 +143,15 @@ export default {
         parent: this,
         props: {},
         component: GenericDocument,
+        hasModalCard: true
+      });
+    },
+    openAnnouncement() {
+      this.$modal.open({
+        scroll: 'keep',
+        parent: this,
+        props: {},
+        component: Announcement,
         hasModalCard: true
       });
     },

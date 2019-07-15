@@ -327,6 +327,14 @@
                       </b-switch>
                   </div>
                 </div>
+
+                <div class="column is-4">
+                  <div class="field">
+                      <b-switch v-model="notificationConfig.onAnnouncementCreate"  @input="saveNotificationConfig" type="is-info">
+                          Enable on new announcement
+                      </b-switch>
+                  </div>
+                </div>
             </div>
 
           </section>

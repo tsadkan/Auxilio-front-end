@@ -9,12 +9,12 @@
                         <p v-html="content.description"></p>
                     </section>
                     <footer class="modal-card-foot">
-                        <button class="button" type="button" @click="$parent.close()">Close</button>
                         <button class="button is-primary" @click="openNewSubTopic"><b-icon
                 icon="plus"
                 class="is-white"
                 style="margin-right: 5px"
               ></b-icon>Add new subtopic</button>
+                        <button class="button" type="button" @click="isDescriptionModalActive = false">Close</button>
                     </footer>
                 </div>
         </b-modal>

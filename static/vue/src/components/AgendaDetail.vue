@@ -148,8 +148,8 @@
 
     <div class="column is-two-fifths" style="padding-right:30px;margin-top:20px">
       <section>
-        <b-message :title="agenda.mainTopic.title" active.sync="true" aria-close-label="Close message" closable="true">
-            <p v-html="agenda.mainTopic.description"></p>
+        <b-message :title="agenda.mainTopic.title" active.sync="true" aria-close-label="Close message" :closable="false">
+            <p v-html="agenda"></p>
         </b-message>
     </section>
        <!-- <div class="card" style="margin-top:1em; border-radius:0.7em;">
@@ -197,7 +197,7 @@ export default {
         category: {},
         createdBy: {}
       },
-      scrollTarget: 'null'
+      scrollTarget: 'null',
     };
   },
   created() {

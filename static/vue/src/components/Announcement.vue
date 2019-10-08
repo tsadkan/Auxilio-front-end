@@ -36,7 +36,7 @@
             </div>
 
             <div class="content">
-                {{ item.title }}
+                <span v-if="item.title">{{ item.title }}</span>
                 <br>
                 <small>{{ item.createdAt | formatDate }}</small>
             </div>

@@ -289,9 +289,6 @@ export default {
       get() {
         return this.content.subTopics.rows;
       },
-      // setter
-      set(newValue) {
-      }
     },
     viewMore() {
       return this.content.subTopics.rows.length < this.content.subTopics.count;
@@ -441,6 +438,7 @@ export default {
       let itemToAdd = payload;
 
       if (removedIndex !== null) {
+        // eslint-disable-next-line prefer-destructuring
         itemToAdd = result.splice(removedIndex, 1)[0];
       }
 

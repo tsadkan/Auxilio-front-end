@@ -4,7 +4,7 @@ import Request from './request';
 const PATH = '/GenericDocuments';
 
 const GenericDocumentAPI = {
-  all(limit, skip, order, filter) {
+  all() {
     return Request.get(`${API_ROOT}${PATH}/list`);
   },
   uploadFiles(data, store) {

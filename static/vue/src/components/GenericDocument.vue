@@ -10,8 +10,8 @@
         </header>
          <section class="modal-card-body">
              <div class="columns is-multiline">
-                <div class="column" v-for="item in items">
-                    <div class="card" v-for="file in item.files" @click="downloadFile(file.name)" style="margin-bottom:10px">
+                <div class="column" v-for="item in items" :key="item">
+                    <div class="card" v-for="file in item.files" @click="downloadFile(file.name)" :key="file" style="margin-bottom:10px">
                         <div class="card-content">
                             <p class="subtitle">
                             <b-icon :icon="getIcon(file.fileType)"></b-icon>

@@ -28,7 +28,7 @@
                       <img :src="response.images[0]" style="height:200px">
                   </div>
                 </div>
-                
+
             </div>
             <div class="card-btn">
                 <a href="javascript:;" v-if="showButton" @click="viewMore">View More</a>
@@ -37,7 +37,6 @@
         </div>
     <!-- </slot> -->
     </div>
-  </div>
 </template>
 
 <script>
@@ -101,6 +100,7 @@ export default {
       }
     },
     isValidUrl(url) {
+      // eslint-disable-next-line no-useless-escape
       const regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
       this.validUrl = regex.test(url);
       return this.validUrl;

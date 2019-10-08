@@ -164,7 +164,6 @@ export default {
       this.agendaList.splice(index, 1);
     },
     onDrop(dropResult) {
-      alert();
       console.log(this.$store.dragSourceIndex);
       console.log(dropResult);
       this.agendaList = this.applyDrag(this.agendaList, dropResult);
@@ -177,6 +176,7 @@ export default {
       let itemToAdd = payload;
 
       if (removedIndex !== null) {
+        // eslint-disable-next-line prefer-destructuring
         itemToAdd = result.splice(removedIndex, 1)[0];
       }
 

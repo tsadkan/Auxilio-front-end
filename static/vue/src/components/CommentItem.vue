@@ -133,6 +133,7 @@ export default {
       return text.replace(urlRegex, url => `<a href="${url}">${url}</a>`);
     },
     getFirstUrl(text) {
+      // eslint-disable-next-line no-useless-escape
       const match = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.exec(text);
       return (match && match[0]) || null;
     }

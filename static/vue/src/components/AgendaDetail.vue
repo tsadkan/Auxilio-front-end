@@ -177,7 +177,7 @@ import FeedbackInput from './FeedbackInput.vue';
 import FilePreview from '@/components/FilePreview.vue';
 import VueNextLevelScroll from 'vue-next-level-scroll';
 import DeleteRequest from './DeleteRequest.vue';
-import UserAvatar from './UserAvatar.vue';
+// import UserAvatar from './UserAvatar.vue';
 
 export default {
   name: 'AgendaDetail',
@@ -188,7 +188,7 @@ export default {
     VueNextLevelScroll,
     // eslint-disable-next-line vue/no-unused-components
     DeleteRequest,
-    UserAvatar
+    // UserAvatar
   },
   data() {
     return {
@@ -353,6 +353,7 @@ export default {
       return text.replace(urlRegex, url => `<a href="${url}">${url}</a>`);
     },
     getFirstUrl(text) {
+      // eslint-disable-next-line no-useless-escape
       const match = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.exec(text);
       return (match && match[0]) || null;
     }

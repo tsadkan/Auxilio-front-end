@@ -4,7 +4,7 @@ import Request from './request';
 const PATH = '/Announcements';
 
 const AnnouncementAPI = {
-  all(limit, skip, order, filter) {
+  all() {
     return Request.get(`${API_ROOT}${PATH}/list`);
   },
   uploadFiles(data, store) {

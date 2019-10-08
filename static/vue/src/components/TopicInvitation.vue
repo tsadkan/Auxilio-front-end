@@ -26,8 +26,6 @@ export default {
       this.invitationHash = this.$route.params.invitationHash;
       this.confirmInvitation();
     }
-    console.log(this.$route.params);
-    console.log('-------------------');
   },
   watch: {
     '$route.params.invitationHash': {
@@ -39,7 +37,6 @@ export default {
   },
   methods: {
     async confirmInvitation() {
-      console.log({ invitationHash: this.invitationHash });
       const result = await AgendaAPI.confirmInvitation({ invitationHash: this.invitationHash });
 
       const { mainTopicId } = result;

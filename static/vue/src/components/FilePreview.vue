@@ -55,7 +55,6 @@ export default {
   },
   methods: {
     async download() {
-      console.log(this.fileData.file.name);
       if (!this.fileData || !this.fileData.file.name) return;
       const response = await ContainerAPI.get(
         this.bucket,

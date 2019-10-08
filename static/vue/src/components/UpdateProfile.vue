@@ -177,9 +177,6 @@ export default {
         });
       }
     },
-    onPhoneInput({ number, isValid, country }) {
-      console.log(number, isValid, country);
-    }
   },
   created() {
     this.item = AuthService.getProfile();

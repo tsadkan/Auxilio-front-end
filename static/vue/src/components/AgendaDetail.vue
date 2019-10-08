@@ -343,12 +343,7 @@ export default {
     backToAgendas() {
       this.$router.push({ name: 'agendas' });
     },
-    escape(event) {
-      console.log('Esc key pressed.', `Event: ${event}`);
-    },
     urlify(text) {
-      console.log('----------------------');
-      console.log(text);
       const urlRegex = /(https?:\/\/[^\s]+)/g;
       return text.replace(urlRegex, url => `<a href="${url}">${url}</a>`);
     },

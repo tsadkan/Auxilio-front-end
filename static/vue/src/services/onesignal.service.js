@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 
 import { UserAccountAPI } from '@/api';
 import { AuthService } from '@/services';

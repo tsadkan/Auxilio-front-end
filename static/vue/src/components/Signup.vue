@@ -185,9 +185,6 @@ export default {
     login() {
       this.$router.push({ name: 'login' });
     },
-    onPhoneInput({ number, isValid, country }) {
-      console.log(number, isValid, country);
-    }
   }
 };
 </script>

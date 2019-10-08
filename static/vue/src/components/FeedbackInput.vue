@@ -108,7 +108,6 @@ export default {
     },
     onFileAttach(data) {
       const { files, meta } = data;
-      console.log(files);
       if (files !== null) {
         for (let i = 0; i < files.length; i += 1) {
           // this.item.files.push({ files[i] , meta });

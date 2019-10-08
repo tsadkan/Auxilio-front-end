@@ -164,8 +164,6 @@ export default {
       this.agendaList.splice(index, 1);
     },
     onDrop(dropResult) {
-      console.log(this.$store.dragSourceIndex);
-      console.log(dropResult);
       this.agendaList = this.applyDrag(this.agendaList, dropResult);
     },
     applyDrag(arr, dragResult) {
@@ -197,7 +195,6 @@ export default {
         const dropIndex = this.agendaList.indexOf(dropContent);
 
         const contentToMove = this.agendaList[dragIndex].subTopics.rows[removedIndex];
-        console.log(contentToMove);
         this.agendaList[dragIndex].subTopics.rows.splice(removedIndex, 1);
         this.agendaList[dropIndex].subTopics.rows.splice(addedIndex, 0, contentToMove);
 

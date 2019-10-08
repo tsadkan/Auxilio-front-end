@@ -56,6 +56,9 @@ const AgendaAPI = {
   leaveTopic(data) {
     return Request.post(`${API_ROOT}${MAIN_TOPIC_PATH}/leave-topic`, data);
   },
+  movePost(data) {
+    return Request.post(`${API_ROOT}${MAIN_TOPIC_PATH}/move-post`, data);
+  }
 };
 
 export default AgendaAPI;

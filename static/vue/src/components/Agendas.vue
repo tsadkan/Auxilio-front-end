@@ -200,6 +200,13 @@ export default {
 
         this.$store.commit('core/changeDragElement', { removedIndex: -1, columnId: '' });
         this.$store.commit('core/changeDropElement', { addedIndex: -1, dropColumnId: '' });
+
+        const postId = contentToMove.id;
+        const mainTopicId = dropContent.id;
+        AgendaAPI.movePost({
+          postId,
+          mainTopicId
+        });
       }
     }
   }

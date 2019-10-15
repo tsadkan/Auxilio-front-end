@@ -60,27 +60,29 @@
             <small>{{content.endDate | formatDate}}</small>
     </div>-->
     <div class="site-card-footer level agenda-footer">
-      <div class="level-item">
-        <span @click.stop="vote(1)" class="subtopic-upvote">
-          <b-icon icon="thumb-up" size="is-small" :type="getAgendaVoteStateClass('up')"></b-icon>&nbsp;
-        </span>
-        <span class="site-card-footer-item">{{(content.upVote - content.downVote) | formatVote}}</span>
-        &nbsp;
-        <span @click.stop="vote(-1)" class="subtopic-downvote">
-          <b-icon icon="thumb-down" :type="getAgendaVoteStateClass('down')" size="is-small"></b-icon>&nbsp;
-        </span>
-      </div>
-      <div class="level-item comments">
-        <b-tooltip label="number of comments" position="is-top">
-          <b-icon icon="message numberofcomments" type="is-success" size="is-small"></b-icon>
-          <span class="site-card-footer-item">{{content.numberOfFeedbacks}}</span>
-        </b-tooltip>
-      </div>
-      <div class="level-item comments">
-        <b-tooltip label="number of replies" position="is-top">
-          <b-icon icon="reply numberofcomments" type="is-success" size="is-small"></b-icon>
-          <span class="site-card-footer-item">{{content.numberOfReplies}}</span>
-        </b-tooltip>
+      <div class="columns" style="display:flex">
+        <div class="column is-half" style="display:flex !important">
+          <span @click.stop="vote(1)" class="subtopic-upvote">
+            <b-icon icon="thumb-up" size="is-small" :type="getAgendaVoteStateClass('up')"></b-icon>&nbsp;
+          </span>
+          <span class="site-card-footer-item">{{(content.upVote - content.downVote) | formatVote}}</span>
+          &nbsp;
+          <span @click.stop="vote(-1)" class="subtopic-downvote">
+            <b-icon icon="thumb-down" :type="getAgendaVoteStateClass('down')" size="is-small"></b-icon>&nbsp;
+          </span>
+        </div>
+        <div class="column">
+          <b-tooltip label="number of comments" position="is-top">
+            <b-icon icon="message numberofcomments" type="is-success" size="is-small"></b-icon>
+            <span class="site-card-footer-item">{{content.numberOfFeedbacks}}</span>
+          </b-tooltip>
+        </div>
+        <div class="column">
+          <b-tooltip label="number of replies" position="is-top">
+            <b-icon icon="reply numberofcomments" type="is-success" size="is-small"></b-icon>
+            <span class="site-card-footer-item">{{content.numberOfReplies}}</span>
+          </b-tooltip>
+        </div>
       </div>
     </div>
   </div>

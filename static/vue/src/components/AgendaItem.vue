@@ -61,7 +61,7 @@
             </b-tooltip>
           </div> -->
           <div class="columns">
-            <div class="column is-12">
+            <div class="column is-12" style="display:flex">
               <div v-for="(user, i) in content.participatedUsers" :key="i">
                 <div
                   v-if="i <= 5"
@@ -162,8 +162,24 @@
               </div>
             </div>
           </div>
-          <div class="agenda-status level">
-            <div class="level-item">
+          <div class="columns agenda-status level"  style="display:flex">
+            <div class="column is-one-third">
+              <b-icon icon="thumb-up post-upvote" type="is-primary" size="is-small"></b-icon>&nbsp;
+              <span
+                class="site-card-footer-item"
+              >{{(content.upVote - content.downVote) | formatVote}}</span>
+              &nbsp;
+              <b-icon icon="thumb-down post-downvote" type="is-grey-lighter" size="is-small"></b-icon>
+            </div>
+            <div class="column is-one-third">
+              <b-icon icon="book numberofcomments" type="is-success" size="is-small"></b-icon>
+              <span class="site-card-footer-item">{{content.numberOfSubTopics}}</span>
+            </div>
+            <div class="column is-one-third">
+              <b-icon icon="message numberofcomments" type="is-success" size="is-small"></b-icon>
+              <span class="site-card-footer-item">{{content.numberOfFeedbacks}}</span>
+            </div>
+            <!-- <div class="level-item">
               <b-icon icon="thumb-up post-upvote" type="is-primary" size="is-small"></b-icon>&nbsp;
               <span
                 class="site-card-footer-item"
@@ -178,7 +194,7 @@
             <div class="level-item">
               <b-icon icon="message numberofcomments" type="is-success" size="is-small"></b-icon>
               <span class="site-card-footer-item">{{content.numberOfFeedbacks}}</span>
-            </div>
+            </div> -->
           </div>
         </div>
         <!-- <div class="column is-narrow has-text-centered" v-if="this.content.subTopics.categoryList.length > 0">

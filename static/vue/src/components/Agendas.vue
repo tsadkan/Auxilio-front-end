@@ -259,7 +259,7 @@ export default {
   background-color: #111 !important;
 }
 .categories {
-  margin-right: 10px;
+  margin: 10px;
   cursor: pointer;
 }
 .agenda-container {

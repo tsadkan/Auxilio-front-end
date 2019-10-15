@@ -29,7 +29,23 @@
       <p>No agenda found.</p>
     </div>
 
-    <div v-if="!isLoading" class="agenda-container">
+    <div v-if="!isLoading && window.width < 700" class="agenda-container">
+      <!-- <draggable v-model="agendaList"> -->
+      <Container @drop="onDrop" orientation='vertical'>
+        <Draggable class="agenda-card" v-for="(agenda, i) in agendaList" :key="i">
+          <agenda-item
+            :parentIndex="i"
+            :content="agenda"
+            @onDelete="deleteTopic($event)"
+            @onLeave="leaveTopic($event, i)"
+            @onCardDrop="onCardDrop()"
+            class="draggable-item"
+          ></agenda-item>
+        </Draggable>
+      </Container>
+      <!-- </draggable> -->
+    </div>
+    <div v-if="!isLoading && window.width > 700" class="agenda-container">
       <!-- <draggable v-model="agendaList"> -->
       <Container @drop="onDrop" orientation="horizontal">
         <Draggable class="agenda-card" v-for="(agenda, i) in agendaList" :key="i">
@@ -75,7 +91,11 @@ export default {
       agendaList: [],
       categoryList: [],
       isLoading: true,
-      mainTopicId: null
+      mainTopicId: null,
+      window: {
+        width: 0,
+        height: 0
+      }
     };
   },
   computed: {
@@ -87,9 +107,14 @@ export default {
     if (this.$route.query.mainTopicId) {
       this.mainTopicId = this.$route.query.mainTopicId;
     }
+    window.addEventListener('resize', this.handleResize);
+    this.handleResize();
   },
   updated() {
     this.scrolltoTarget();
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.handleResize);
   },
   methods: {
     async getCategories() {
@@ -208,6 +233,10 @@ export default {
           mainTopicId
         });
       }
+    },
+    handleResize() {
+      this.window.width = window.innerWidth;
+      this.window.height = window.innerHeight;
     }
   }
 };

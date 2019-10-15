@@ -599,7 +599,7 @@ export default {
   display: block;
   font-size: 12px;
   font-weight: 700;
-  left: 0;
+  left: 5px;
   overflow: hidden;
   position: absolute;
   top: 0;

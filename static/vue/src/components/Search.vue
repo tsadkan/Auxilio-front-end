@@ -1,6 +1,5 @@
 <template>
   <div>
-    <div class="navbar-item no-padding-left no-padding-right">
       <input
         id="search-input"
         class="search-input"
@@ -44,7 +43,6 @@
           </div>
         </div>
       </div>
-    </div>
   </div>
 </template>
 

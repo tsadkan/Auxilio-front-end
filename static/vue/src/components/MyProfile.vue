@@ -2,24 +2,8 @@
   <div class="columns">
     <div class="container profile">
       <div class="section profile-heading">
-        <div class="columns is-mobile is-multiline" style="float: right">
-          <a
-            v-if="isOwner || !userAccountId"
-            class="button is-primary is-outlined"
-            href="#"
-            @click="openFeedbackReport()"
-          >System Feedback</a>
-          <a
-            v-if="isOwner || !userAccountId"
-            class="button is-primary is-outlined"
-            href="#"
-            style="margin-left: 5px "
-            @click="openIssueReport()"
-          >Issue Report</a>
-        </div>
-
-        <div class="columns is-mobile is-multiline">
-          <div class="column is-2">
+        <div class="columns">
+          <div class="column">
             <span class="header-icon user-profile-image">
               <user-avatar
                 class="avatar-profile"
@@ -30,7 +14,7 @@
               />
             </span>
           </div>
-          <div class="column is-3-tablet is-10-mobile name">
+          <div class="column">
             <p>
               <span class="title is-bold">{{ `${profile.givenName} ${profile.familyName}` }}</span>
               <br>
@@ -47,8 +31,6 @@
                 >Edit Profile</a>
               </router-link>
               <br>
-            </p>
-            <p class="tagline">
               <span v-if="profile.country">{{ profile.country }}</span>
               <br>
               {{ profile.organization }}
@@ -58,21 +40,44 @@
               {{ profile.phoneNumber}}
             </p>
           </div>
-          <div class="column is-1-tablet is-4-mobile has-text-centered">
-            <p class="stat-val">{{ myStatus.agendas.count }}</p>
-            <p class="stat-key">agendas</p>
+          <div class="columns" style="display: flex;margin-right: 20px; margin-left:10px;padding-bottom: 10px">
+            <div class="column right-border">
+              <p class="stat-val">{{ myStatus.agendas.count }}</p>
+              <p class="stat-key">agendas</p>
+            </div>
+            <div class="column right-border">
+              <p class="stat-val">{{ myStatus.posts.count }}</p>
+              <p class="stat-key">subtopics</p>
+            </div>
           </div>
-          <div class="column is-2-tablet is-4-mobile has-text-centered">
-            <p class="stat-val">{{ myStatus.posts.count }}</p>
-            <p class="stat-key">subtopics</p>
+          <div class="columns" style="display: flex;margin-right: 20px; margin-left:10px;padding-bottom: 10px">
+            <div class="column right-border">
+              <p class="stat-val">{{ myStatus.feedbacks.count }}</p>
+              <p class="stat-key">comments</p>
+            </div>
+            <div class="column right-border">
+              <p class="stat-val">{{ myStatus.replies.count }}</p>
+              <p class="stat-key">replies</p>
+            </div>
           </div>
-          <div class="column is-2-tablet is-4-mobile has-text-centered">
-            <p class="stat-val">{{ myStatus.feedbacks.count }}</p>
-            <p class="stat-key">comments</p>
-          </div>
-          <div class="column is-2-tablet is-4-mobile has-text-centered">
-            <p class="stat-val">{{ myStatus.replies.count }}</p>
-            <p class="stat-key">replies</p>
+          <div class="columns" style="display:flex; margin-left: 10px">
+            <div class="column">
+              <a
+              v-if="isOwner || !userAccountId"
+              class="button is-primary is-outlined"
+              href="#"
+              @click="openFeedbackReport()"
+            >System Feedback</a>
+            </div>
+            <div class="column">
+              <a
+              v-if="isOwner || !userAccountId"
+              class="button is-primary is-outlined"
+              href="#"
+              style="margin-left: 5px "
+              @click="openIssueReport()"
+            >Issue Report</a>
+            </div>
           </div>
         </div>
       </div>
@@ -683,5 +688,15 @@ time {
 }
 .tag {
   color: #fff;
+}
+.right-border {
+  border-right: 1px solid #ddd;
+  height: 150px;
+}
+
+@media (min-width: 950px) {
+    .right-border {
+      width: 100px;
+    }
 }
 </style>

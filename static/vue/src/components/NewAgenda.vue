@@ -33,20 +33,21 @@
       <footer class="modal-card-foot has-background-info" style="justify-content: right;">
         <div class="is-pulled-right">
           <button class="button" type="button" @click="cancel">Cancel</button>
-          <button class="button is-primary">Save</button>
+          <button :disabled="isSaving" class="button is-primary">Save</button>
         </div>
       </footer>
     </div>
   </form>
 </template>
 <script>
-import { AgendaAPI, PostCategoryAPI } from '@/api';
+import { AgendaAPI } from '@/api';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 export default {
   name: 'NewAgenda',
   data() {
     return {
+      isSaving: false,
       item: {
       },
       categoryList: [],
@@ -57,28 +58,37 @@ export default {
     };
   },
   created() {
-    this.getCategoryList();
+    this.item.id = this.$route.params.agendaId;
+    if (this.item.id) this.getMainTopic(this.item.id);
   },
   methods: {
     cancel() {
       this.$router.push({ name: 'agendas' });
     },
-    async getCategoryList() {
-      const categories = await PostCategoryAPI.all();
-      this.categoryList = categories.rows;
+    async getMainTopic(id) {
+      this.item = await AgendaAPI.getTopic(id);
     },
     async save() {
       const valid = await this.$validator.validateAll();
       if (valid) {
+        this.isSaving = true;
         await AgendaAPI.createMainTopic(this.item);
         this.$toast.open({
           message: 'Topic created successfully.',
           type: 'is-success',
           position: 'is-top'
         });
+        this.isSaving = false;
         this.$router.push({ name: 'agendas' });
       }
     }
   }
 };
 </script>
+<style>
+@media (max-width: 500px) {
+    .modal-card {
+      width: 340px !important;
+    }
+}
+</style>

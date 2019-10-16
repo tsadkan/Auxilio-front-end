@@ -134,7 +134,7 @@ export default {
   },
   data() {
     return {
-      isNavbarOpen: true,
+      isNavbarOpen: false,
       profilePopupVisible: false,
       appName: 'Auxilio',
       bucket: 'users',

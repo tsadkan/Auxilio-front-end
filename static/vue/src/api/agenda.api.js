@@ -12,6 +12,9 @@ const AgendaAPI = {
       }
     });
   },
+  getTopic(id) {
+    return Request.get(`${API_ROOT}${MAIN_TOPIC_PATH}/${id}`);
+  },
   detail(id) {
     return Request.get(`${API_ROOT}${PATH}/detail`, {
       params: {

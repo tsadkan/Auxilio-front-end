@@ -153,6 +153,7 @@ export default {
   border-radius: 3px;
   display: none;
   overflow: auto;
+  z-index: 1000;
 }
 .show {
   display: block;

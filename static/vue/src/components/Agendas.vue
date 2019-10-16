@@ -1,7 +1,7 @@
 <template>
   <div style="padding-top:0.5em;">
     <vue-next-level-scroll :target="`#topic-${mainTopicId}`" ref="scrollRef"></vue-next-level-scroll>
-    <div v-if="isLoading" class="columns is-centered spinner">
+    <div v-if="isLoading" class="columns spinner">
       <atom-spinner :animation-duration="1000" :size="60" :color="'rgb(255,255,255)'"/>
     </div>
     <div v-if="!isLoading" class="columns is-centered">
@@ -25,13 +25,13 @@
         </tag>
       </div>
     </div>
-    <div v-if="!isLoading && agendaList.length == 0" class="columns is-centered no-found">
+    <div v-if="!isLoading && agendaList.length == 0" class="columns no-found">
       <p>No agenda found.</p>
     </div>
 
-    <div v-if="!isLoading && window.width < 700" class="agenda-container">
+    <!-- <div v-if="!isLoading && window.width < 700" class="agenda-container"> -->
       <!-- <draggable v-model="agendaList"> -->
-      <Container @drop="onDrop" orientation='vertical'>
+      <!-- <Container @drop="onDrop" orientation='vertical'>
         <Draggable class="agenda-card" v-for="(agenda, i) in agendaList" :key="i">
           <agenda-item
             :parentIndex="i"
@@ -42,10 +42,10 @@
             class="draggable-item"
           ></agenda-item>
         </Draggable>
-      </Container>
+      </Container> -->
       <!-- </draggable> -->
-    </div>
-    <div v-if="!isLoading && window.width > 700" class="agenda-container">
+    <!-- </div> -->
+    <div v-if="!isLoading" class="agenda-container">
       <!-- <draggable v-model="agendaList"> -->
       <Container @drop="onDrop" orientation="horizontal">
         <Draggable class="agenda-card" v-for="(agenda, i) in agendaList" :key="i">
@@ -244,11 +244,13 @@ export default {
 <style scoped lapng="scss">
 .spinner {
   margin-top: 200px;
+  margin-left: 50%;
 }
 .no-found {
   font-size: 20px;
   color: rgb(255, 255, 255);
   margin-top: 200px;
+  margin-left: 30%;
 }
 .add-category {
   color: #fff !important;

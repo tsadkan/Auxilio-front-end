@@ -26,12 +26,22 @@
             class="post-creater"
             @click.stop="openProfile(content.createdBy.id)"
           >{{`${content.createdBy.givenName} ${content.createdBy.familyName}`}}</span>
-          <div class="delete-container has-text-right" @click.stop="deleteTopic(content.id)">
-            <b-tooltip class="delete-tooltip" label="Delete Topic" position="is-bottom">
+           <div class="delete-container has-text-right" @click.stop="deleteTopic(content.id)">
+            <b-tooltip label="Delete Topic" position="is-bottom">
               <b-icon
                 icon="close"
-                class="delete-agenda"
                 type="is-secondary"
+                position="is-bottom"
+                size="is-small"
+              ></b-icon>
+            </b-tooltip>
+          </div>
+          <div class="edit-container has-text-right" @click.stop="$router.push({ name: 'create-agenda', params: { agendaId: content.id } });">
+            <b-tooltip  label="Edit Topic" position="is-bottom" style="margin-right: 10px">
+              <b-icon
+                icon="pencil"
+                type="is-secondary"
+                style="float: right"
                 position="is-bottom"
                 size="is-small"
               ></b-icon>
@@ -326,6 +336,7 @@ export default {
               } else {
                 await this.getSubTopics({ mainTopicId: this.content.id }, 4);
               }
+              this.content.numberOfSubTopics += 1;
             }
           }
         },
@@ -576,7 +587,12 @@ export default {
 }
 .delete-container {
   position: relative;
-  right: 10px;
+  right: 0px;
+  float: right !important;
+}
+.edit-container {
+  position: relative;
+  right: 0px;
   float: right !important;
 }
 .agenda-comments {

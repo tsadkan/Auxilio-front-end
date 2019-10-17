@@ -7,36 +7,32 @@
     </div>
     <div v-if="response">
       <!-- <slot :img="response.images[0]" :title="response.title" :description="response.description" :url="url"> -->
-        <div class="wrapper" :style="{width:cardWidth}" @click="viewMore">
-            <!-- <div class="card-img">
+      <div class="wrapper" :style="{width:cardWidth}" @click="viewMore">
+        <!-- <div class="card-img">
                 <img :src="response.images[0]">
-            </div> -->
-            <div class="card-info">
-              <a :href="url" class="url">{{url | limitTo(30, "...")}}</a>
-            </div>
-            <div class="card-text link-preview-content">
-                <h6 class="header">{{response.title | limitTo(35, "...")}}</h6>
-                <p class="content">{{response.description | limitTo(100, "...")}}</p>
-                <div class="video-container">
-                  <div v-if="isVideo" class="play-icon">
-                    <b-icon
-                      icon="play"
-                      size="is-large">
-                    </b-icon>
-                  </div>
-                  <div class="card-img img-content">
-                      <img :src="response.images[0]" style="height:200px">
-                  </div>
-                </div>
-
-            </div>
-            <div class="card-btn">
-                <a href="javascript:;" v-if="showButton" @click="viewMore">View More</a>
-            </div>
-            </div>
+        </div>-->
+        <div class="card-info">
+          <a :href="url" class="url">{{url | limitTo(30, "...")}}</a>
         </div>
-    <!-- </slot> -->
+        <div class="card-text link-preview-content">
+          <h6 class="header">{{response.title | limitTo(35, "...")}}</h6>
+          <p class="content">{{response.description | limitTo(100, "...")}}</p>
+          <div class="video-container">
+            <div v-if="isVideo" class="play-icon">
+              <b-icon icon="play" size="is-large"></b-icon>
+            </div>
+            <div class="card-img img-content">
+              <img :src="response.images[0]" style="height:200px" />
+            </div>
+          </div>
+        </div>
+        <div class="card-btn">
+          <a href="javascript:;" v-if="showButton" @click="viewMore">View More</a>
+        </div>
+      </div>
     </div>
+    <!-- </slot> -->
+  </div>
 </template>
 
 <script>
@@ -79,15 +75,29 @@ export default {
   created() {
     if (this.url) {
       const response = urlParser.parse(this.url);
-      this.isVideo = (response && response.mediaType && response.mediaType === 'video') || false;
+      this.isVideo =
+        (response && response.mediaType && response.mediaType === 'video') ||
+        false;
     }
     this.getLinkPreview();
+    window.addEventListener('resize', this.handleResize);
+    this.handleResize();
+    if (this.window.width < 700) {
+      this.cardWidth = '100%';
+    }
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.handleResize);
   },
   data() {
     return {
       response: null,
       validUrl: false,
       isLoading: true,
+      window: {
+        width: 0,
+        height: 0
+      }
     };
   },
   methods: {
@@ -107,19 +117,25 @@ export default {
     },
     getLinkPreview() {
       if (this.isValidUrl(this.url)) {
-        this.httpRequest((response) => {
-          this.response = JSON.parse(response);
-        }, () => {
-          this.response = null;
-          this.validUrl = false;
-        });
+        this.httpRequest(
+          response => {
+            this.response = JSON.parse(response);
+          },
+          () => {
+            this.response = null;
+            this.validUrl = false;
+          }
+        );
       }
     },
     httpRequest(success, error) {
       const http = new XMLHttpRequest();
       const params = `url=${this.url}`;
       http.open('POST', this.apiUrl, true);
-      http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+      http.setRequestHeader(
+        'Content-type',
+        'application/x-www-form-urlencoded'
+      );
       http.onreadystatechange = () => {
         if (http.readyState === 4 && http.status === 200) {
           success(http.responseText);
@@ -129,6 +145,10 @@ export default {
         }
       };
       http.send(params);
+    },
+    handleResize() {
+      this.window.width = window.innerWidth;
+      this.window.height = window.innerHeight;
     }
   }
 };
@@ -233,7 +253,8 @@ img {
   margin-top: 10px;
   margin-bottom: 10px;
 }
-.link-preview-content .header, .link-preview-content .content {
+.link-preview-content .header,
+.link-preview-content .content {
   text-align: left;
 }
 
@@ -270,7 +291,11 @@ img {
 }
 
 @keyframes rotate {
-  0%    { transform: rotate(0deg); }
-  100%  { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>

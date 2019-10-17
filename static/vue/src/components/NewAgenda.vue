@@ -11,20 +11,20 @@
         <div class="columns">
           <div class="column">
             <b-field
-            label="Title"
-            :type="{'is-danger': errors.has('title')}"
-            :message="errors.first('title')"
+              label="Title"
+              :type="{'is-danger': errors.has('title')}"
+              :message="errors.first('title')"
             >
-            <b-input
+              <b-input
                 type="text"
                 v-model="item.title"
                 placeholder="title*"
                 title="title"
                 v-validate="'required'"
-            ></b-input>
+              ></b-input>
             </b-field>
             <b-field label="Description">
-                <ckeditor :editor="editor" v-model="item.description" :config="editorConfig"></ckeditor>
+              <ckeditor :editor="editor" v-model="item.description" :config="editorConfig"></ckeditor>
             </b-field>
           </div>
         </div>
@@ -48,8 +48,7 @@ export default {
   data() {
     return {
       isSaving: false,
-      item: {
-      },
+      item: {},
       categoryList: [],
       editor: ClassicEditor,
       editorConfig: {
@@ -87,8 +86,9 @@ export default {
 </script>
 <style>
 @media (max-width: 500px) {
-    .modal-card {
-      width: 340px !important;
-    }
+  .modal-card {
+    width: 340px !important;
+    margin-left: 7% !important;
+  }
 }
 </style>

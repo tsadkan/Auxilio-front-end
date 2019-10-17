@@ -20,17 +20,21 @@
                 v-if="feedback.createdBy"
                 @click.stop="openProfile(feedback.createdBy.id)"
               >{{feedback.createdBy.title}} {{`${feedback.createdBy.givenName} ${feedback.createdBy.familyName}`}}</strong>
-              <br>
+              <br />
               <span v-html="urlify (feedback.body)"></span>
               <link-preview :url="getFirstUrl(feedback.body)"></link-preview>
 
-              <br>
+              <br />
               <small>
-                <b-icon icon="thumb-up" type="is-primary" size="is-small"></b-icon>
-                <small>{{feedback.upVote}}</small>
+                <span @click="vote(1)">
+                  <b-icon icon="thumb-up" type="is-primary" size="is-small"></b-icon>
+                  <small>{{feedback.upVote}}</small>
+                </span>
                 &nbsp;·&nbsp;
-                <b-icon icon="thumb-down" type="is-grey-lighter" size="is-small"></b-icon>
-                <small>{{feedback.downVote}}</small>
+                <span @click="vote(-1)">
+                  <b-icon icon="thumb-down" type="is-grey-lighter" size="is-small"></b-icon>
+                  <small>{{feedback.downVote}}</small>
+                </span>
                 &nbsp;·&nbsp;
                 {{feedback.createdAt | formatDate}}
                 &nbsp;&nbsp;
@@ -57,12 +61,12 @@
               </small>
             </p>
           </div>
-          <div class="column is-narrow" style="align-items:center; display: flex;">
+          <div class="column is-narrow desktop-vote" style="align-items:center; display: flex;">
             <div class="is-block">
               <div class="is-block has-text-centered">
                 <b-tooltip label="Up Vote">
                   <b-icon
-                    @click.native="vote(1)"
+                    @click="vote(1)"
                     icon="thumb-up"
                     :type="getAgendaVoteStateClass('up')"
                     size="is-small"
@@ -71,12 +75,12 @@
                 </b-tooltip>
               </div>
               <div class="is-block">
-                <hr>
+                <hr />
               </div>
               <div class="is-block has-text-centered">
                 <b-tooltip label="Down Vote" ition="is-bottom" type="is-dark">
                   <b-icon
-                    @click.native="vote(-1)"
+                    @click="vote(-1)"
                     icon="thumb-down"
                     :type="getAgendaVoteStateClass('down')"
                     size="is-small"
@@ -225,7 +229,7 @@ export default {
         this.$dialog.confirm({
           title: 'Deleting comment',
           message:
-          'Are you sure you want to <b>delete</b> your comment? This action cannot be undone.',
+            'Are you sure you want to <b>delete</b> your comment? This action cannot be undone.',
           confirmText: 'Delete Comment',
           type: 'is-danger',
           hasIcon: true,
@@ -248,7 +252,7 @@ export default {
             subject: 'Agenda'
           },
           events: {
-            close: async (data) => {
+            close: async data => {
               if (data) {
                 await FeedbackAPI.remove(this.feedback.id, data.reasonToDelete);
                 this.$toast.open({
@@ -277,7 +281,9 @@ export default {
     },
     getFirstUrl(text) {
       // eslint-disable-next-line no-useless-escape
-      const match = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.exec(text);
+      const match = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.exec(
+        text
+      );
       return (match && match[0]) || null;
     }
   }
@@ -289,5 +295,10 @@ export default {
 }
 .feedback-creater:hover {
   color: #593c79;
+}
+@media (max-width: 500px) {
+  .desktop-vote {
+    display: none !important;
+  }
 }
 </style>

@@ -1,6 +1,5 @@
 <template>
   <div class="columns is-centered" v-esc="backToAgendas">
-
     <div class="column is-three-fifths" style="padding-left:30px">
       <div class="card" style="margin-top:1em; border-radius:0.7em;">
         <div class="card-content">
@@ -85,45 +84,53 @@
               class="column is-narrow"
           >{{agenda.remainingDays}} days remaing({{agenda.progress || 0}}%)</div>-->
           <!-- </div> -->
-          <nav class="level is-mobile">
-            <div @click="vote(1)" class="level-item has-text-centered">
-              <div>
-                <p class="heading">
-                  <b-icon icon="thumb-up" :type="getAgendaVoteStateClass('up')" size="is-small"></b-icon>Up Vote
-                </p>
-                <p class="title has-text-primary">{{agenda.upVote || 0}}</p>
+          <div class="columns" style="display: flex">
+            <div class="column">
+              <div @click="vote(1)" class="level-item has-text-centered">
+                <div>
+                  <p class="heading">
+                    <b-icon icon="thumb-up" :type="getAgendaVoteStateClass('up')" size="is-small"></b-icon>Up Vote
+                  </p>
+                  <p class="title has-text-primary">{{agenda.upVote || 0}}</p>
+                </div>
               </div>
             </div>
-            <div @click="vote(-1)" class="level-item has-text-centered">
-              <div>
-                <p class="heading">
-                  <b-icon
-                    icon="thumb-down"
-                    :type="getAgendaVoteStateClass('down')"
-                    size="is-small"
-                  />Down Vote
-                </p>
-                <p class="title">{{agenda.downVote || 0}}</p>
+            <div class="column">
+              <div @click="vote(-1)" class="level-item has-text-centered">
+                <div>
+                  <p class="heading">
+                    <b-icon
+                      icon="thumb-down"
+                      :type="getAgendaVoteStateClass('down')"
+                      size="is-small"
+                    />Down Vote
+                  </p>
+                  <p class="title">{{agenda.downVote || 0}}</p>
+                </div>
               </div>
             </div>
-            <div class="level-item has-text-centered">
-              <div>
-                <p class="heading">
-                  <b-icon icon="message" type="is-grey-lighter" size="is-small"></b-icon>FeedbackS
-                </p>
-                <p class="title has-text-success">{{agenda.numberOfFeedbacks || 0}}</p>
+            <div class="column">
+              <div class="level-item has-text-centered">
+                <div>
+                  <p class="heading">
+                    <b-icon icon="message" type="is-grey-lighter" size="is-small"></b-icon>FeedbackS
+                  </p>
+                  <p class="title has-text-success">{{agenda.numberOfFeedbacks || 0}}</p>
+                </div>
               </div>
             </div>
-            <div class="level-item has-text-centered">
-              &nbsp;&nbsp;
-              <small class="has-text-link pointer" @click="editAgenda">EDIT</small>
-              &nbsp;&nbsp;
-              <small
-                class="has-text-danger pointer"
-                @click="deleteAgenda(agenda)"
-              >DELETE</small>
+            <div class="column">
+              <div class="level-item has-text-centered">
+                &nbsp;&nbsp;
+                <small class="has-text-link pointer" @click="editAgenda">EDIT</small>
+                &nbsp;&nbsp;
+                <small
+                  class="has-text-danger pointer"
+                  @click="deleteAgenda(agenda)"
+                >DELETE</small>
+              </div>
             </div>
-          </nav>
+          </div>
           <template v-if="agenda.files && agenda.files.length">
             <FilePreview
               v-for="(file,index) in agenda.files"
@@ -134,7 +141,7 @@
           </template>
 
           <div class="has-text-centered"></div>
-          <feedback-input @success="handleNewFeedback($event)" :post-id="agendaId"/>
+          <feedback-input @success="handleNewFeedback($event)" :post-id="agendaId" />
           <feedback-item
             class="media"
             v-for="(feedback,i) in agenda.feedbacks"
@@ -146,27 +153,19 @@
       </div>
     </div>
 
-    <div class="column is-two-fifths" style="padding-right:30px;margin-top:20px">
-      <section>
-        <b-message :title="agenda.mainTopic.title" active.sync="true" aria-close-label="Close message" :closable="false">
-            <p v-html="agenda.mainTopic.description"></p>
+    <div class="column is-two-fifths" style="padding-right:30px;margin-top:20px; margin-left: 20px">
+      <section v-if="agenda.mainTopic">
+        <b-message
+          :title="agenda.mainTopic.title"
+          active.sync="true"
+          aria-close-label="Close message"
+          :closable="false"
+        >
+          <p v-html="agenda.mainTopic.description"></p>
+          <span>{{ `${agenda.mainTopic.createdBy.givenName} ${agenda.mainTopic.createdBy.familyName}` }}</span>
+          <span style="float: right">{{ agenda.mainTopic.createdAt | formatDate }}</span>
         </b-message>
-    </section>
-       <!-- <div class="card" style="margin-top:1em; border-radius:0.7em;">
-         <div class="card-content">
-           <div class="columns">
-            <div class="column">
-              <p class="title">{{agenda.mainTopic.title}}</p>
-              <p v-html="agenda.mainTopic.description"></p>
-              <p>
-                <user-avatar :bucket="'users'" :size="30" :file-name="agenda.mainTopic.createdBy.profilePicture"/>
-                <span>{{ `${agenda.mainTopic.createdBy.givenName} ${agenda.mainTopic.createdBy.familyName}` }}</span>
-                <span>{{ agenda.mainTopic.createdAt | formatDate }}</span>
-              </p>
-            </div>
-           </div>
-         </div>
-       </div> -->
+      </section>
     </div>
   </div>
 </template>
@@ -187,7 +186,7 @@ export default {
     FeedbackInput,
     VueNextLevelScroll,
     // eslint-disable-next-line vue/no-unused-components
-    DeleteRequest,
+    DeleteRequest
     // UserAvatar
   },
   data() {
@@ -197,7 +196,7 @@ export default {
         category: {},
         createdBy: {}
       },
-      scrollTarget: 'null',
+      scrollTarget: 'null'
     };
   },
   created() {
@@ -315,7 +314,7 @@ export default {
             subject: 'subtopic'
           },
           events: {
-            close: async (data) => {
+            close: async data => {
               if (data) {
                 await AgendaAPI.remove(this.agenda.id, data.reasonToDelete);
                 this.$toast.open({
@@ -349,7 +348,9 @@ export default {
     },
     getFirstUrl(text) {
       // eslint-disable-next-line no-useless-escape
-      const match = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.exec(text);
+      const match = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.exec(
+        text
+      );
       return (match && match[0]) || null;
     }
   },

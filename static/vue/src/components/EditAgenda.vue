@@ -25,21 +25,6 @@
         <div class="columns">
           <div class="column">
             <b-field
-              label="Due Date"
-              :type="{'is-danger': errors.has('due date')}"
-              :message="errors.first('due date')"
-            >
-              <b-datepicker
-                v-validate="'required'"
-                v-model="item.endDate"
-                placeholder="Due date"
-                name="due date"
-                icon="calendar-today"
-              ></b-datepicker>
-            </b-field>
-          </div>
-          <div class="column">
-            <b-field
               label="Category"
               :type="{'is-danger': errors.has('category')}"
               :message="errors.first('category')"
@@ -61,7 +46,7 @@
           </div>
         </div>
         <b-field label="Description">
-          <wysiwyg required v-model="item.description"/>
+          <wysiwyg required v-model="item.description" />
         </b-field>
       </section>
       <footer class="modal-card-foot has-background-info" style="justify-content: right;">
@@ -115,7 +100,7 @@ export default {
       if (valid) {
         const formData = new FormData();
         const item = { ...this.item, postId: this.agendaId };
-        Object.keys(item).forEach((key) => {
+        Object.keys(item).forEach(key => {
           formData.append(key, item[key]);
         });
         await AgendaAPI.update(formData);

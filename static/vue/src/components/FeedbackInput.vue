@@ -1,6 +1,6 @@
 <template>
   <article class="media">
-    <b-notification :closable="false">
+    <b-notification :closable="false" v-if="isDocumentUploading">
             <b-loading :is-full-page="true" :active.sync="isDocumentUploading" :can-cancel="false">
                 <b-icon
                     icon="attachment"

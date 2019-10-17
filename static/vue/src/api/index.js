@@ -9,6 +9,8 @@ import ContainerAPI from './container.api';
 import SearchAPI from './search.api';
 import GenericDocumentAPI from './generic-document.api';
 import AnnouncementAPI from './announcement.api';
+import NewsAPI from './news.api';
+import OverviewAPI from './overview.api';
 
 const API_ROOT = process.env.VUE_APP_API_ROOT || window.location.origin;
 // eslint-disable-next-line
@@ -24,5 +26,7 @@ export {
   ContainerAPI,
   SearchAPI,
   GenericDocumentAPI,
-  AnnouncementAPI
+  AnnouncementAPI,
+  NewsAPI,
+  OverviewAPI
 };

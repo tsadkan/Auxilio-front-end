@@ -14,6 +14,7 @@
       <div class="field">
         <p class="control">
           <button class="button is-primary" @click="editComment()">Edit reply</button>
+          <button style="margin-left: 10px;" class="button is-primary" @click="editMode=falase">Cancle</button>
         </p>
       </div>
     </div>

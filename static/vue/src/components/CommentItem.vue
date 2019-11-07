@@ -31,7 +31,7 @@
           >DELETE</small>
           <small
             class="has-text-link pointer show-reply"
-            @click="showReplyBox = !showReplyBox"
+            @click="addReply"
           ><b-icon icon="reply" type="is-info" size="is-small"></b-icon>reply</small>
         </p>
       </div>
@@ -60,6 +60,8 @@ import CommentEdit from './CommentEdit.vue';
 import UserAvatar from './UserAvatar.vue';
 import CommentReplyInput from './CommentReplyInput.vue';
 import CommentReplyItem from './CommentReplyItem.vue';
+import CommentEditModal from './CommentEditModal.vue';
+import CommentReplyInputModal from './CommentReplyInputModal.vue';
 
 export default {
   name: 'FeedbackReplyItem',
@@ -78,16 +80,62 @@ export default {
   data() {
     return {
       editMode: false,
-      showReplyBox: false
+      showReplyBox: false,
+      window: {
+        width: 0,
+        height: 0
+      }
     };
+  },
+  created() {
+    window.addEventListener('resize', this.handleResize);
+    this.handleResize();
   },
   methods: {
     handleCommentUpdated(data) {
       this.comment = data;
       this.editMode = false;
     },
+    addReply() {
+      if (this.window.width < 700) {
+        this.$modal.open({
+          scroll: 'keep',
+          parent: this,
+          props: {
+            commentId: this.comment.id
+          },
+          events: {
+            close: (data) => {
+              this.comment.replies.push(data);
+            }
+          },
+          component: CommentReplyInputModal,
+          hasModalCard: true
+        });
+      } else {
+        this.showReplyBox = !this.showReplyBox;
+      }
+    },
     editComment() {
-      this.editMode = true;
+      if (this.window.width < 700) {
+        this.$modal.open({
+          scroll: 'keep',
+          parent: this,
+          props: {
+            commentId: this.comment.id,
+            body: this.comment.body
+          },
+          events: {
+            close: (data) => {
+              this.comment = data;
+            }
+          },
+          component: CommentEditModal,
+          hasModalCard: true
+        });
+      } else {
+        this.editMode = true;
+      }
     },
     deleteComment() {
       this.$dialog.confirm({
@@ -136,6 +184,10 @@ export default {
       // eslint-disable-next-line no-useless-escape
       const match = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.exec(text);
       return (match && match[0]) || null;
+    },
+    handleResize() {
+      this.window.width = window.innerWidth;
+      this.window.height = window.innerHeight;
     }
   }
 };

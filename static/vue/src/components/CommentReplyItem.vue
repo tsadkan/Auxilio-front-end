@@ -44,6 +44,7 @@
 <script>
 import { CommentAPI } from '@/api';
 import CommentReplyEdit from './CommentReplyEdit.vue';
+import CommentReplyEditModal from './CommentReplyEditModal.vue';
 import UserAvatar from './UserAvatar.vue';
 
 export default {
@@ -60,8 +61,16 @@ export default {
   },
   data() {
     return {
-      editMode: false
+      editMode: false,
+      window: {
+        width: 0,
+        height: 0
+      }
     };
+  },
+  created() {
+    window.addEventListener('resize', this.handleResize);
+    this.handleResize();
   },
   methods: {
     handleCommentUpdated(data) {
@@ -69,7 +78,25 @@ export default {
       this.editMode = false;
     },
     editComment() {
-      this.editMode = true;
+      if (this.window.width < 700) {
+        this.$modal.open({
+          scroll: 'keep',
+          parent: this,
+          props: {
+            commentId: this.comment.id,
+            body: this.comment.body
+          },
+          events: {
+            close: (data) => {
+              this.comment = data;
+            }
+          },
+          component: CommentReplyEditModal,
+          hasModalCard: true
+        });
+      } else {
+        this.editMode = true;
+      }
     },
     deleteComment() {
       this.$dialog.confirm({
@@ -101,6 +128,10 @@ export default {
       // eslint-disable-next-line no-useless-escape
       const match = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.exec(text);
       return (match && match[0]) || null;
+    },
+    handleResize() {
+      this.window.width = window.innerWidth;
+      this.window.height = window.innerHeight;
     }
   }
 };

@@ -50,7 +50,7 @@
                 >DELETE</small>
                 <small
                   class="has-text-link pointer show-reply"
-                  @click="scrollToCommentInput(feedback.id)"
+                  @click="addReply"
                 >
                   <b-icon icon="reply" type="is-info" size="is-small"></b-icon>reply
                   <vue-next-level-scroll
@@ -96,6 +96,7 @@
       <div v-if="editMode">
         <feedback-edit
           @success="handleFeedbackUpdated($event)"
+          @cancle="editMode=false"
           :feedback-id="feedback.id"
           :body="feedback.body"
         />
@@ -117,6 +118,7 @@
         :comment="comment"
       />
       <comment-input
+         v-if="window.width > 700"
         :id="`comment-input-${feedback.id}`"
         @success="handleNewComment($event)"
         :feedback-id="feedback.id"
@@ -129,10 +131,12 @@ import VueNextLevelScroll from 'vue-next-level-scroll';
 import CommentItem from './CommentItem.vue';
 import CommentInput from './CommentInput.vue';
 import FeedbackEdit from './FeedbackEdit.vue';
+import FeedbackEditModal from './FeedbackEditModal.vue';
 import FilePreview from '@/components/FilePreview.vue';
 import { FeedbackAPI, FeedbackVoteAPI } from '@/api';
 import UserAvatar from './UserAvatar.vue';
 import DeleteRequest from './DeleteRequest.vue';
+import CommentInputModal from './CommentInputModal.vue';
 
 export default {
   name: 'FeedbackItem',
@@ -153,8 +157,19 @@ export default {
   data() {
     return {
       editMode: false,
-      bucket: 'users'
+      bucket: 'users',
+      window: {
+        width: 0,
+        height: 0
+      }
     };
+  },
+  created() {
+    window.addEventListener('resize', this.handleResize);
+    this.handleResize();
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.handleResize);
   },
   methods: {
     handleFeedbackUpdated(data) {
@@ -222,7 +237,45 @@ export default {
       }
     },
     editFeedback() {
-      this.editMode = true;
+      if (this.window.width < 700) {
+        this.$modal.open({
+          scroll: 'keep',
+          parent: this,
+          props: {
+            feedbackId: this.feedback.id,
+            body: this.feedback.body
+          },
+          events: {
+            close: (data) => {
+              this.feedback = data;
+            }
+          },
+          component: FeedbackEditModal,
+          hasModalCard: true
+        });
+      } else {
+        this.editMode = true;
+      }
+    },
+    addReply() {
+      if (this.window.width < 700) {
+        this.$modal.open({
+          scroll: 'keep',
+          parent: this,
+          props: {
+            feedbackId: this.feedback.id
+          },
+          events: {
+            close: (data) => {
+              this.feedback.replies.push(data);
+            }
+          },
+          component: CommentInputModal,
+          hasModalCard: true
+        });
+      } else {
+        this.scrollToCommentInput(this.feedback.id);
+      }
     },
     deleteFeedback(feedback) {
       if (this.$acl.hasPermission(feedback)) {
@@ -252,7 +305,7 @@ export default {
             subject: 'Agenda'
           },
           events: {
-            close: async data => {
+            close: async (data) => {
               if (data) {
                 await FeedbackAPI.remove(this.feedback.id, data.reasonToDelete);
                 this.$toast.open({
@@ -285,6 +338,10 @@ export default {
         text
       );
       return (match && match[0]) || null;
+    },
+    handleResize() {
+      this.window.width = window.innerWidth;
+      this.window.height = window.innerHeight;
     }
   }
 };

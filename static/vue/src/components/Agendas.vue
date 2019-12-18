@@ -264,8 +264,19 @@ export default {
   margin: 10px;
   cursor: pointer;
 }
+
 .agenda-container {
-  overflow-x: scroll;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.agenda-container, .agenda-card {
+  transform:rotateX(180deg);
+  -moz-transform:rotateX(180deg); /* Mozilla */
+  -webkit-transform:rotateX(180deg); /* Safari and Chrome */
+  -ms-transform:rotateX(180deg); /* IE 9+ */
+  -o-transform:rotateX(180deg); /* Opera */
+
 }
 .agenda-card {
   display: table-cell;
@@ -277,8 +288,8 @@ export default {
 ::-webkit-scrollbar-thumb {
   background: #999;
   opacity: 0.7;
-  height: 5px;
-  width: 20px;
+  height: 2px;
+  width: 10px;
 }
 .tag {
   color: #fff;
